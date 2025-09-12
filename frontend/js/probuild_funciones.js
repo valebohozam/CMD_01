@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ProBuild - Funciones</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #ff6b35;
+            --secondary-color: #1a1a2e;
+            --accent-color: #0f4c75;
+            --text-light: #ffffff;
+            --text-dark: #2c3e50;
+            --background-light: #f8f9fa;
+            --gradient-primary: linear-gradient(135deg, #ff6b35 0%, #ff8c42 100%);
+            --gradient-secondary: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            --shadow-primary: 0 20px 60px rgba(255, 107, 53, 0.3);
+            --shadow-secondary: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            overflow-x: hidden;
+            background: var(--background-light);
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1rem 0;
+            background: rgba(26, 26, 46, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--text-light);
+            text-decoration: none;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a.active,
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gradient-primary);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a.active::after,
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-links a.active {
+            color: var(--primary-color);
+        }
+
+        .cta-button {
+            background: var(--gradient-primary);
+            color: var(--text-light);
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-primary);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 25px 70px rgba(255, 107, 53, 0.4);
+        }
+
+        /* Hero Section */
+        .page-hero {
+            background: var(--gradient-secondary);
+            padding: 8rem 2rem 4rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(10px, 10px); }
+        }
+
+        .page-hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .page-hero h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--text-light);
+            margin-bottom: 1rem;
+        }
+
+        .page-hero .highlight {
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .page-hero p {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 2rem;
+        }
+
+        /* Features Detail Section */
+        .features-detail {
+            padding: 6rem 2rem;
+            background: white;
+        }
+
+        .features-detail-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .feature-detail {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            margin-bottom: 6rem;
+        }
+
+        .feature-detail:nth-child(even) {
+            direction: rtl;
+        }
+
+        .feature-detail:nth-child(even) > * {
+            direction: ltr;
+        }
+
+        .feature-content h2 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+        }
+
+        .feature-content p {
+            font-size: 1.1rem;
+            color: #6c757d;
+            margin-bottom: 2rem;
+            line-height: 1.8;
+        }
+
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .feature-list li {
+            padding: 0.5rem 0;
+            color: var(--text-dark);
+            position: relative;
+            padding-left: 2rem;
+        }
+
+        .feature-list li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--primary-color);
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .feature-visual {
+            background: var(--gradient-secondary);
+            border-radius: 20px;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+            min-height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .feature-mockup {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 15px;
+            padding: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .mockup-header {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .mockup-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .mockup-content {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .progress-bar {
+            background: rgba(255, 255, 255, 0.2);
+            height: 8px;
+            border-radius: 4px;
+            margin: 1rem 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--gradient-primary);
+            border-radius: 4px;
+            animation: progressAnimation 3s ease-in-out infinite;
+        }
+
+        @keyframes progressAnimation {
+            0%, 100% { width: 30%; }
+            50% { width: 85%; }
+        }
+
+        .chart-bars {
+            display: flex;
+            gap: 0.5rem;
+            align-items: end;
+            height: 60px;
+            margin: 1rem 0;
+        }
+
+        .chart-bar {
+            background: var(--gradient-primary);
+            border-radius: 3px;
+            flex: 1;
+            animation: chartAnimation 2s ease-in-out infinite;
+        }
+
+        .chart-bar:nth-child(1) { height: 40%; animation-delay: 0s; }
+        .chart-bar:nth-child(2) { height: 70%; animation-delay: 0.2s; }
+        .chart-bar:nth-child(3) { height: 90%; animation-delay: 0.4s; }
+        .chart-bar:nth-child(4) { height: 60%; animation-delay: 0.6s; }
+        .chart-bar:nth-child(5) { height: 45%; animation-delay: 0.8s; }
+
+        @keyframes chartAnimation {
+            0%, 100% { transform: scaleY(0.8); }
+            50% { transform: scaleY(1.1); }
+        }
+
+        .team-avatars {
+            display: flex;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: var(--gradient-secondary);
+            padding: 6rem 2rem;
+            text-align: center;
+            color: var(--text-light);
+        }
+
+        .cta-content h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .cta-content p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: var(--text-light);
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-primary);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 30px 80px rgba(255, 107, 53, 0.4);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .page-hero h1 { font-size: 2.2rem; }
+            .feature-detail { 
+                grid-template-columns: 1fr; 
+                gap: 2rem; 
+                text-align: center;
+            }
+            .feature-detail:nth-child(even) { direction: ltr; }
+            .features-detail { padding: 4rem 1rem; }
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="construction-pm-landing.html" class="logo">ProBuild</a>
+            <ul class="nav-links">
+                <li><a href="construction-pm-landing.html">Inicio</a></li>
+                <li><a href="#" class="active">Funciones</a></li>
+                <li><a href="probuild-proyectos.html">Proyectos</a></li>
+                <li><a href="probuild-contacto.html">Contacto</a></li>
+            </ul>
+            <a href="probuild-login.html" class="cta-button">Iniciar Sesión</a>
+        </div>
+    </nav>
+
+    <!-- Page Hero -->
+    <section class="page-hero">
+        <div class="page-hero-content">
+            <h1>Funciones <span class="highlight">Avanzadas</span></h1>
+            <p>Descubre todas las herramientas que ProBuild pone a tu disposición para gestionar proyectos de construcción de manera eficiente y profesional.</p>
+        </div>
+    </section>
+
+    <!-- Features Detail -->
+    <section class="features-detail">
+        <div class="features-detail-container">
+            <!-- Dashboard Feature -->
+            <div class="feature-detail fade-in">
+                <div class="feature-content">
+                    <h2>Dashboard Intuitivo</h2>
+                    <p>Obtén una vista completa de todos tus proyectos en un solo lugar. Nuestro dashboard te permite monitorear el progreso, identificar problemas y tomar decisiones informadas.</p>
+                    <ul class="feature-list">
+                        <li>Visualización en tiempo real del progreso</li>
+                        <li>Métricas clave y KPIs importantes</li>
+                        <li>Alertas automáticas de problemas</li>
+                        <li>Gráficos interactivos y personalizables</li>
+                        <li>Vista consolidada de múltiples proyectos</li>
+                    </ul>
+                </div>
+                <div class="feature-visual">
+                    <div class="feature-mockup">
+                        <div class="mockup-header">
+                            <div class="mockup-dot"></div>
+                            <div class="mockup-dot"></div>
+                            <div class="mockup-dot"></div>
+                        </div>
+                        <div class="mockup-content">
+                            <div style="margin-bottom: 1rem; font-weight: 600;">Resumen de Proyectos</div>
+                            <div style="margin-bottom: 0.5rem; font-size: 0.9rem;">Torre Central - 75% completado</div>
+                            <div class="progress-bar"><div class="progress-fill" style="width: 75%;"></div></div>
+                            <div style="margin-bottom: 0.5rem; font-size: 0.9rem;">Residencial Los Pinos - 45% completado</div>
+                            <div class="progress-bar"><div class="progress-fill" style="width: 45%;"></div></div>
+                            <div class="chart-bars">
+                                <div class="chart-bar"></div>
+                                <div class="chart-bar"></div>
+                                <div class="chart-bar"></div>
+                                <div class="chart-bar"></div>
+                                <div class="chart-bar"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Team Management Feature -->
+            <div class="feature-detail fade-in">
+                <div class="feature-content">
+                    <h2>Gestión de Equipos</h2>
+                    <p>Coordina a todo tu equipo de trabajo con herramientas avanzadas de colaboración. Asigna tareas, establece responsabilidades y mantén a todos informados.</p>
+                    <ul class="feature-list">
+                        <li>Perfiles detallados de cada miembro</li>
+                        <li>Asignación automática de tareas</li>
+                        <li>Control de accesos y permisos</li>
+                        <li>Comunicación en tiempo real</li>
+                        <li>Seguimiento de productividad</li>
+                    </ul>
+                </div>
+                <div class="feature-visual">
+                    <div class="feature-mockup">
+                        <div class="mockup-header">
+                            <div class="mockup-dot"></div>
+                            <div class="mockup-dot"></div>
+                            <div class="mockup-dot"></div>
+                        </div>
+                        <div class="mockup-content">
+                            <div style="margin-bottom: 1rem; font-weight: 600;">Equipo de Trabajo</div>
+                            <div class="team-avatars">
+                                <div class="avatar">JM</div>
+                                <div class="avatar">AS</div>
+                                <div class="avatar">CR</div>
+                                <div class="avatar">ML</div>
+                                <div class="avatar">+5</div>
+                            </div>
+                            <div style="margin: 1rem 0; font-size: 0.9rem;">
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                    <span>Juan Martínez - Arquitecto</span>
+                                    <span style="color: #4CAF50;">En línea</span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                    <span>Ana Silva - Ingeniera</span>
+                                    <span style="color: #FF9800;">Ocupado</span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between;">
+                                    <span>Carlos Ruiz - Supervisor</span>
+                                    <span style="color: #4CAF50;">En línea</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Planning Feature -->
+            <div class="feature-detail fade-in">
+                <div class="feature-content">
+                    <h2>Planificación Avanzada</h2>
+                    <p>Crea cronogramas detallados con todas las fases de tu proyecto. Establece dependencias entre tareas y optimiza los recursos disponibles.</p>
+                    <ul class="feature-list">
+                        <li>Cronogramas de Gantt interactivos</li>
+                        <li>Gestión de dependencias entre tareas</li>
+                        <li>Asignación optimizada de recursos</li>
+                        <li>Identificación de ruta crítica</li>
+                        <li>Escenarios de planificación múltiples</li>
+                    </ul>
+                </div>
+                <div class="feature-visual">
+                    <div class="feature-mockup">
+                        <div class="mockup-header">
+                            <div class="mockup-dot"></div>
+                            <div class="mockup-dot"></div>
+                            <div class="mockup-dot"></div>
+                        </div>
+                        <div class="mockup-content">
+                            <div style="margin-bottom: 1rem; font-weight: 600;">Cronograma del Proyecto</div>
+                            <div style="margin-bottom: 0.5rem; font-size: 0.9rem;">
+                                <div style="display: flex; justify-content: space-between;">
+                                    <span>Fundación</span>
+                                    <span>Sem 1-3</span>
+                                </div>
+                                <div class="progress-bar"><div class="progress-fill" style="width: 100%; animation: none; background: #4CAF50;"></div></div>
+                            </div>
+                            <div style="margin-bottom: 0.5rem; font-size: 0.9rem;">
+                                <div style="display: flex; justify-content: space-between;">
+                                    <span>Estructura</span>
+                                    <span>Sem 4-8</span>
+                                </div>
+                                <div class="progress-bar"><div class="progress-fill" style="width: 60%; animation: none;"></div></div>
+                            </div>
+                            <div style="font-size: 0.9rem;">
+                                <div style="display: flex; justify-content: space-between;">
+                                    <span>Acabados</span>
+                                    <span>Sem 9-12</span>
+                                </div>
+                                <div class="progress-bar"><div class="progress-fill" style="width: 20%; animation: none; background: #FFC107;"></div></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cost Control Feature -->
+            <div class="feature-detail fade-in">
+                <div class="feature-content">
+                    <h2>Control de Costos</h2>
+                    <p>Mantén tu proyecto dentro del presupuesto con herramientas avanzadas de control financiero. Monitorea gastos y proyecta costos futuros.</p>
+                    <ul class="feature-list">
+                        <li>Seguimiento detallado de gastos</li>
+                        <li>Comparación presupuesto vs real</li>
+                        <li>Proyecciones financieras automáticas</li>
+                        <li>Alertas de desviaciones presupuestarias</li>
+                        <li>Reportes financieros detallados</li>
+                    </ul>
+                </div>
+                <div class="feature-visual">
+                    <div class="feature-mockup">
+                        <div class="mockup-header">
+                            <div class="mockup-dot"></div>
+                            <div class="mockup-dot"></div>
+                            <div class="mockup-dot"></div>
+                        </div>
+                        <div class="mockup-content">
+                            <div style="margin-bottom: 1rem; font-weight: 600;">Control Financiero</div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
+                                <div style="text-align: center;">
+                                    <div style="font-size: 1.2rem; color: var(--primary-color);">$45,000</div>
+                                    <div style="font-size: 0.8rem;">Gastado</div>
+                                </div>
+                                <div style="text-align: center;">
+                                    <div style="font-size: 1.2rem; color: #4CAF50;">$60,000</div>
+                                    <div style="font-size: 0.8rem;">Presupuesto</div>
+                                </div>
+                                <div style="text-align: center;">
+                                    <div style="font-size: 1.2rem; color: #FFC107;">$15,000</div>
+                                    <div style="font-size: 0.8rem;">Restante</div>
+                                </div>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 75%; animation: none; background: linear-gradient(90deg, #4CAF50 0%, #FF9800 75%, #F44336 100%);"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="cta-content">
+            <h2>¿Listo para optimizar tus proyectos?</h2>
+            <p>Únete a cientos de empresas que ya confían en ProBuild para gestionar sus proyectos de construcción.</p>
+            <a href="probuild-login.html" class="btn-primary">Comenzar Ahora</a>
+        </div>
+    </section>
+
+    <script>
+        // Scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Navbar background on scroll
+        window.addEventListener('scroll', () => {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.style.background = 'rgba(26, 26, 46, 0.98)';
+            } else {
+                navbar.style.background = 'rgba(26, 26, 46, 0.95)';
+            }
+        });
+    </script>
+</body>
+</html>
