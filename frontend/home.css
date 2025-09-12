@@ -151,14 +151,19 @@ body {
 }
 
 .cta-button {
-    background: var(--gradient-primary);
+    background: transparent;
     color: var(--text-light);
-    padding: 0.75rem 1.5rem;
+    padding: 1rem 2rem;
+    border: 2px solid rgba(255, 255, 255, 0.3);
     border-radius: 50px;
+    font-size: 1rem;
     text-decoration: none;
+    cursor: pointer;
     font-weight: 600;
+    display: inline-block;
     transition: all 0.3s ease;
     box-shadow: var(--shadow-primary);
+    backdrop-filter: blur(10px);
 }
 
 .cta-button:hover {
@@ -208,20 +213,21 @@ body {
     animation: slideInLeft 1s ease-out 0.4s both;
 }
 
-.btn-primary {
+.login-button {
     background: var(--gradient-primary);
     color: var(--text-light);
     padding: 1rem 2rem;
     border: none;
     border-radius: 50px;
-    font-size: 1rem;
+    text-decoration: none;
     font-weight: 600;
     cursor: pointer;
-    text-decoration: none;
-    display: inline-block;
+    font-size: 1rem;
     transition: all 0.3s ease;
     box-shadow: var(--shadow-primary);
+    display: inline-block;
 }
+
 
 .btn-secondary {
     background: transparent;
