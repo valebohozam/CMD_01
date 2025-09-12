@@ -1,33 +1,30 @@
-🔄 1. Subir avances a GitHub
+✅ 1. Clonar el repositorio (solo la primera vez):
+git clone https://github.com/usuario/repositorio.git
+cd repositorio
 
-Abre tu terminal y navega a tu proyecto:
+🔄 2. Actualizar tu repositorio local (mantenerlo al día):
+a. Cambiar a la rama dev y actualizarla:
+git checkout dev
+git pull origin dev
 
-cd ruta/a/tu/proyecto
+b. Ir a tu rama individual y actualizarla con los últimos cambios:
+git checkout feature/Valeria  # o tu rama correspondiente
+git merge dev
 
-
-Inicializa Git (si no lo has hecho):
-
-git init
-
-
-Agrega los archivos al staging area:
+Si hay conflictos, resuélvelos, guarda los cambios y haz:
 
 git add .
+git commit -m "Resuelto conflicto con dev"
 
+⬆️ 3. Subir tus avances:
+a. Asegúrate de estar en tu rama:
+git checkout feature/Valeria
 
-Haz un commit con un mensaje descriptivo:
+b. Agrega, commitea y sube:
+git add .
+git commit -m "Descripción de los avances"
+git push origin feature/Valeria
 
-git commit -m "Agregado avance del proyecto"
+🔁 4. Cuando termines tu tarea:
 
-
-Conecta tu repositorio local con GitHub (solo la primera vez):
-
-git remote add origin https://github.com/tuUsuario/tuRepositorio.git
-
-
-Sube tus cambios a GitHub:
-
-git push -u origin main
-
-
-(si tu rama se llama diferente, como master o dev, usa ese nombre en vez de main)
+Haz un pull request (PR) desde tu rama (feature/Valeria) hacia dev en GitHub, para que tus cambios se integren al desarrollo general.
