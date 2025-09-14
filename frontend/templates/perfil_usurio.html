@@ -107,6 +107,11 @@
             color: var(--primary-color);
         }
 
+        .nav-links a:hover {
+            color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
         .user-menu {
             position: relative;
             display: flex;
@@ -180,10 +185,18 @@
             position: relative;
             cursor: pointer;
             transition: all 0.3s ease;
+            overflow: hidden;
         }
 
         .profile-avatar-large:hover {
             transform: scale(1.05);
+        }
+
+        .profile-avatar-large img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
         }
 
         .avatar-upload {
@@ -205,6 +218,7 @@
 
         .avatar-upload:hover {
             background: var(--accent-color);
+            transform: scale(1.1);
         }
 
         .profile-name {
@@ -243,10 +257,12 @@
             background: rgba(255, 107, 53, 0.2);
             color: var(--primary-color);
             border: 1px solid rgba(255, 107, 53, 0.3);
+            transform: translateX(5px);
         }
 
         .profile-menu a:hover:not(.active) {
             background: rgba(255, 255, 255, 0.1);
+            transform: translateX(3px);
         }
 
         /* Profile Content */
@@ -261,7 +277,7 @@
 
         .section-header {
             display: flex;
-            justify-content: between;
+            justify-content: space-between;
             align-items: center;
             margin-bottom: 2rem;
             padding-bottom: 1rem;
@@ -284,12 +300,17 @@
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
-            margin-left: auto;
         }
 
         .edit-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 10px 30px rgba(255, 107, 53, 0.4);
+        }
+
+        .edit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
         }
 
         /* Form Styles */
@@ -341,9 +362,12 @@
             border-color: var(--primary-color);
             box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.2);
             background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
         }
 
-        .form-group input:read-only {
+        .form-group input:read-only,
+        .form-group select:disabled,
+        .form-group textarea:read-only {
             background: rgba(255, 255, 255, 0.05);
             cursor: not-allowed;
         }
@@ -369,11 +393,29 @@
             border: 1px solid rgba(255, 255, 255, 0.2);
             text-align: center;
             transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--gradient-primary);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
         }
 
         .stat-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .stat-card:hover::before {
+            transform: scaleX(1);
         }
 
         .stat-number {
@@ -407,6 +449,23 @@
             text-decoration: none;
             display: inline-block;
             text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
         }
 
         .btn-primary {
@@ -420,6 +479,12 @@
             box-shadow: 0 15px 40px rgba(255, 107, 53, 0.4);
         }
 
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
         .btn-secondary {
             background: transparent;
             color: rgba(255, 255, 255, 0.8);
@@ -428,6 +493,7 @@
 
         .btn-secondary:hover {
             background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
         }
 
         /* Alert Messages */
@@ -437,12 +503,53 @@
             margin-bottom: 1rem;
             font-size: 0.9rem;
             animation: slideInDown 0.3s ease-out;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .alert::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 4px;
+            height: 100%;
+            background: currentColor;
         }
 
         .alert-success {
             background: rgba(39, 174, 96, 0.2);
             color: #2ecc71;
             border: 1px solid rgba(39, 174, 96, 0.3);
+        }
+
+        .alert-error {
+            background: rgba(231, 76, 60, 0.2);
+            color: #e74c3c;
+            border: 1px solid rgba(231, 76, 60, 0.3);
+        }
+
+        .alert-info {
+            background: rgba(52, 152, 219, 0.2);
+            color: #3498db;
+            border: 1px solid rgba(52, 152, 219, 0.3);
+        }
+
+        /* Progress Bar */
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            overflow: hidden;
+            margin: 1rem 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--gradient-primary);
+            border-radius: 2px;
+            transition: width 0.3s ease;
         }
 
         /* Animations */
@@ -468,6 +575,21 @@
             }
         }
 
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
         /* Security Settings */
         .security-item {
             display: flex;
@@ -475,10 +597,18 @@
             align-items: center;
             padding: 1rem 0;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
         }
 
         .security-item:last-child {
             border-bottom: none;
+        }
+
+        .security-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 0 -1rem;
         }
 
         .security-info h4 {
@@ -490,6 +620,78 @@
         .security-info p {
             color: rgba(255, 255, 255, 0.7);
             font-size: 0.9rem;
+        }
+
+        /* Toggle Switch */
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(255, 255, 255, 0.3);
+            transition: 0.4s;
+            border-radius: 24px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: 0.4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background: var(--gradient-primary);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+        /* Loading States */
+        .loading {
+            position: relative;
+            opacity: 0.7;
+            pointer-events: none;
+        }
+
+        .loading::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            margin: -10px 0 0 -10px;
+            border: 2px solid var(--primary-color);
+            border-top: 2px solid transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         /* Responsive Design */
@@ -527,6 +729,34 @@
             .stats-grid {
                 grid-template-columns: 1fr;
             }
+
+            .section-header {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .profile-sidebar {
+                padding: 1rem;
+            }
+
+            .profile-content {
+                padding: 1rem;
+            }
+
+            .profile-avatar-large {
+                width: 80px;
+                height: 80px;
+                font-size: 2rem;
+            }
+
+            .avatar-upload {
+                width: 25px;
+                height: 25px;
+                font-size: 0.7rem;
+            }
         }
     </style>
 </head>
@@ -542,7 +772,7 @@
                 <li><a href="contacto.html">Contacto</a></li>
             </ul>
             <div class="user-menu">
-                <div class="user-avatar">JD</div>
+                <div class="user-avatar" id="navAvatar">JD</div>
             </div>
         </div>
     </nav>
@@ -558,8 +788,8 @@
                         <div class="avatar-upload" id="avatarUpload">📷</div>
                     </div>
                     <input type="file" id="avatarInput" accept="image/*" style="display: none;">
-                    <div class="profile-name">Juan Pérez</div>
-                    <div class="profile-role">Arquitecto Senior</div>
+                    <div class="profile-name" id="displayName">Juan Pérez</div>
+                    <div class="profile-role" id="displayRole">Arquitecto Senior</div>
                 </div>
 
                 <ul class="profile-menu">
@@ -629,23 +859,24 @@
                 <div class="content-section" id="stats-section" style="display: none;">
                     <div class="section-header">
                         <h2 class="section-title">Estadísticas</h2>
+                        <button class="btn btn-secondary" id="refreshStats">🔄 Actualizar</button>
                     </div>
 
                     <div class="stats-grid">
                         <div class="stat-card">
-                            <div class="stat-number">24</div>
+                            <div class="stat-number" id="completedProjects">24</div>
                             <div class="stat-label">Proyectos Completados</div>
                         </div>
                         <div class="stat-card">
-                            <div class="stat-number">8</div>
+                            <div class="stat-number" id="activeProjects">8</div>
                             <div class="stat-label">Proyectos Activos</div>
                         </div>
                         <div class="stat-card">
-                            <div class="stat-number">156</div>
+                            <div class="stat-number" id="completedTasks">156</div>
                             <div class="stat-label">Tareas Completadas</div>
                         </div>
                         <div class="stat-card">
-                            <div class="stat-number">95%</div>
+                            <div class="stat-number" id="efficiency">95%</div>
                             <div class="stat-label">Eficiencia</div>
                         </div>
                     </div>
@@ -653,9 +884,21 @@
                     <div class="form-group full-width">
                         <label>Proyectos Recientes</label>
                         <div style="background: rgba(255, 255, 255, 0.05); padding: 1rem; border-radius: 8px; margin-top: 0.5rem;">
-                            <p style="color: rgba(255, 255, 255, 0.8); margin-bottom: 0.5rem;">• Torre Empresarial Centro - Completado</p>
-                            <p style="color: rgba(255, 255, 255, 0.8); margin-bottom: 0.5rem;">• Conjunto Residencial Alameda - En Progreso</p>
-                            <p style="color: rgba(255, 255, 255, 0.8);">• Centro Comercial Plaza Norte - En Progreso</p>
+                            <p style="color: rgba(255, 255, 255, 0.8); margin-bottom: 0.5rem;">
+                                • Torre Empresarial Centro - <span style="color: var(--success-color);">Completado</span>
+                            </p>
+                            <p style="color: rgba(255, 255, 255, 0.8); margin-bottom: 0.5rem;">
+                                • Conjunto Residencial Alameda - <span style="color: var(--primary-color);">En Progreso (75%)</span>
+                            </p>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 75%;"></div>
+                            </div>
+                            <p style="color: rgba(255, 255, 255, 0.8);">
+                                • Centro Comercial Plaza Norte - <span style="color: var(--primary-color);">En Progreso (45%)</span>
+                            </p>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 45%;"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -671,7 +914,7 @@
                             <h4>Contraseña</h4>
                             <p>Última actualización: hace 2 meses</p>
                         </div>
-                        <button class="btn btn-primary">Cambiar</button>
+                        <button class="btn btn-primary" id="changePasswordBtn">Cambiar</button>
                     </div>
 
                     <div class="security-item">
@@ -679,15 +922,26 @@
                             <h4>Autenticación de dos factores</h4>
                             <p>Protege tu cuenta con verificación adicional</p>
                         </div>
-                        <button class="btn btn-secondary">Activar</button>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="twoFactorToggle">
+                            <span class="slider"></span>
+                        </label>
                     </div>
 
                     <div class="security-item">
                         <div class="security-info">
                             <h4>Sesiones activas</h4>
-                            <p>Gestiona tus dispositivos conectados</p>
+                            <p>Gestiona tus dispositivos conectados - 3 dispositivos activos</p>
                         </div>
-                        <button class="btn btn-secondary">Ver</button>
+                        <button class="btn btn-secondary" id="manageSessions">Ver Detalles</button>
+                    </div>
+
+                    <div class="security-item">
+                        <div class="security-info">
+                            <h4>Historial de acceso</h4>
+                            <p>Revisa los últimos accesos a tu cuenta</p>
+                        </div>
+                        <button class="btn btn-secondary" id="viewHistory">Ver Historial</button>
                     </div>
                 </div>
 
@@ -697,13 +951,14 @@
                         <h2 class="section-title">Preferencias</h2>
                     </div>
 
-                    <form class="profile-form">
+                    <form class="profile-form" id="preferencesForm">
                         <div class="form-group">
                             <label for="language">Idioma</label>
                             <select id="language" name="language">
                                 <option value="es" selected>Español</option>
                                 <option value="en">English</option>
                                 <option value="pt">Português</option>
+                                <option value="fr">Français</option>
                             </select>
                         </div>
                         <div class="form-group">
@@ -712,29 +967,52 @@
                                 <option value="America/Bogota" selected>Bogotá (GMT-5)</option>
                                 <option value="America/Mexico_City">México (GMT-6)</option>
                                 <option value="America/Argentina/Buenos_Aires">Buenos Aires (GMT-3)</option>
+                                <option value="America/Lima">Lima (GMT-5)</option>
+                                <option value="Europe/Madrid">Madrid (GMT+1)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="theme">Tema</label>
+                            <select id="theme" name="theme">
+                                <option value="dark" selected>Oscuro</option>
+                                <option value="light">Claro</option>
+                                <option value="auto">Automático</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="dateFormat">Formato de Fecha</label>
+                            <select id="dateFormat" name="dateFormat">
+                                <option value="DD/MM/YYYY" selected>DD/MM/YYYY</option>
+                                <option value="MM/DD/YYYY">MM/DD/YYYY</option>
+                                <option value="YYYY-MM-DD">YYYY-MM-DD</option>
                             </select>
                         </div>
                         <div class="form-group full-width">
                             <label>Notificaciones</label>
                             <div style="display: flex; flex-direction: column; gap: 1rem; margin-top: 0.5rem;">
                                 <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
-                                    <input type="checkbox" checked style="accent-color: var(--primary-color);">
+                                    <input type="checkbox" checked style="accent-color: var(--primary-color);" id="emailNotifications">
                                     <span style="color: rgba(255, 255, 255, 0.8);">Notificaciones por email</span>
                                 </label>
                                 <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
-                                    <input type="checkbox" checked style="accent-color: var(--primary-color);">
+                                    <input type="checkbox" checked style="accent-color: var(--primary-color);" id="projectUpdates">
                                     <span style="color: rgba(255, 255, 255, 0.8);">Actualizaciones de proyecto</span>
                                 </label>
                                 <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
-                                    <input type="checkbox" style="accent-color: var(--primary-color);">
+                                    <input type="checkbox" style="accent-color: var(--primary-color);" id="newsletter">
                                     <span style="color: rgba(255, 255, 255, 0.8);">Newsletter semanal</span>
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                                    <input type="checkbox" checked style="accent-color: var(--primary-color);" id="browserNotifications">
+                                    <span style="color: rgba(255, 255, 255, 0.8);">Notificaciones del navegador</span>
                                 </label>
                             </div>
                         </div>
                     </form>
 
                     <div class="action-buttons">
-                        <button class="btn btn-primary">Guardar Preferencias</button>
+                        <button class="btn btn-secondary" id="resetPreferences">Restablecer</button>
+                        <button class="btn btn-primary" id="savePreferences">Guardar Preferencias</button>
                     </div>
                 </div>
             </div>
@@ -742,56 +1020,110 @@
     </div>
 
     <script>
-        // Section Navigation
+        // Global variables
+        let originalData = {};
+        let isEditing = false;
+        let currentAvatar = null;
+
+        // DOM Elements
         const menuLinks = document.querySelectorAll('.menu-link');
         const contentSections = document.querySelectorAll('.content-section');
-
-        menuLinks.forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                
-                // Remove active class from all links
-                menuLinks.forEach(l => l.classList.remove('active'));
-                // Add active class to clicked link
-                link.classList.add('active');
-
-                // Hide all sections
-                contentSections.forEach(section => section.style.display = 'none');
-                
-                // Show target section
-                const targetSection = link.dataset.section + '-section';
-                document.getElementById(targetSection).style.display = 'block';
-            });
-        });
-
-        // Edit Profile Functionality
         const editBtn = document.getElementById('editBtn');
         const cancelBtn = document.getElementById('cancelBtn');
         const saveBtn = document.getElementById('saveBtn');
         const actionButtons = document.getElementById('actionButtons');
         const profileForm = document.getElementById('profileForm');
         const alertContainer = document.getElementById('alert-container');
+        const avatarUpload = document.getElementById('avatarUpload');
+        const avatarInput = document.getElementById('avatarInput');
+        const profileAvatar = document.getElementById('profileAvatar');
+        const navAvatar = document.getElementById('navAvatar');
+        const displayName = document.getElementById('displayName');
+        const displayRole = document.getElementById('displayRole');
 
-        let originalData = {};
+        // Initialize application
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeNavigation();
+            initializeProfileEdit();
+            initializeAvatarUpload();
+            initializeSecurityFeatures();
+            initializePreferences();
+            initializeStatistics();
+        });
 
-        editBtn.addEventListener('click', () => {
+        // Navigation functionality
+        function initializeNavigation() {
+            menuLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    
+                    // Don't switch if currently editing
+                    if (isEditing) {
+                        showAlert('Guarda o cancela los cambios antes de navegar a otra sección.', 'info');
+                        return;
+                    }
+                    
+                    // Remove active class from all links
+                    menuLinks.forEach(l => l.classList.remove('active'));
+                    // Add active class to clicked link
+                    link.classList.add('active');
+
+                    // Hide all sections with fade effect
+                    contentSections.forEach(section => {
+                        section.style.opacity = '0';
+                        setTimeout(() => {
+                            section.style.display = 'none';
+                        }, 150);
+                    });
+                    
+                    // Show target section with fade effect
+                    setTimeout(() => {
+                        const targetSection = link.dataset.section + '-section';
+                        const section = document.getElementById(targetSection);
+                        section.style.display = 'block';
+                        setTimeout(() => {
+                            section.style.opacity = '1';
+                        }, 50);
+                    }, 150);
+                });
+            });
+        }
+
+        // Profile editing functionality
+        function initializeProfileEdit() {
+            editBtn.addEventListener('click', enterEditMode);
+            cancelBtn.addEventListener('click', exitEditMode);
+            saveBtn.addEventListener('click', saveProfile);
+        }
+
+        function enterEditMode() {
             // Store original data
             const formData = new FormData(profileForm);
             originalData = Object.fromEntries(formData);
-
-            // Enable form fields
+            
+            // Enable form fields with animation
             const inputs = profileForm.querySelectorAll('input, select, textarea');
-            inputs.forEach(input => {
-                input.removeAttribute('readonly');
-                input.removeAttribute('disabled');
+            inputs.forEach((input, index) => {
+                setTimeout(() => {
+                    input.removeAttribute('readonly');
+                    input.removeAttribute('disabled');
+                    input.style.transform = 'scale(1.02)';
+                    setTimeout(() => {
+                        input.style.transform = 'scale(1)';
+                    }, 200);
+                }, index * 50);
             });
 
             // Show action buttons, hide edit button
             editBtn.style.display = 'none';
             actionButtons.style.display = 'flex';
-        });
+            actionButtons.style.animation = 'fadeIn 0.3s ease-out';
+            
+            isEditing = true;
+            showAlert('Modo de edición activado. Modifica los campos que desees.', 'info');
+        }
 
-        cancelBtn.addEventListener('click', () => {
+        function exitEditMode() {
             // Restore original data
             Object.keys(originalData).forEach(key => {
                 const field = profileForm.querySelector(`[name="${key}"]`);
@@ -814,14 +1146,317 @@
             // Hide action buttons, show edit button
             editBtn.style.display = 'block';
             actionButtons.style.display = 'none';
+            
+            isEditing = false;
             clearAlert();
-        });
+        }
 
-        saveBtn.addEventListener('click', () => {
-            // Simulate save
-            saveBtn.textContent = 'Guardando...';
+        function saveProfile() {
+            // Validate form
+            const firstName = document.getElementById('firstName').value.trim();
+            const lastName = document.getElementById('lastName').value.trim();
+            const email = document.getElementById('email').value.trim();
+            
+            if (!firstName || !lastName || !email) {
+                showAlert('Por favor completa todos los campos obligatorios.', 'error');
+                return;
+            }
+            
+            if (!isValidEmail(email)) {
+                showAlert('Por favor ingresa un email válido.', 'error');
+                return;
+            }
+
+            // Show loading state
+            saveBtn.innerHTML = '<span class="loading"></span> Guardando...';
             saveBtn.disabled = true;
 
+            // Simulate API call
             setTimeout(() => {
-                // Update profile display
+                // Update display elements
                 const firstName = document.getElementById('firstName').value;
+                const lastName = document.getElementById('lastName').value;
+                const role = document.getElementById('role').selectedOptions[0].text;
+                
+                displayName.textContent = `${firstName} ${lastName}`;
+                displayRole.textContent = role;
+                
+                // Update avatar initials
+                const initials = `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase();
+                if (!currentAvatar) {
+                    profileAvatar.textContent = initials;
+                    navAvatar.textContent = initials;
+                }
+
+                // Disable form fields
+                const inputs = profileForm.querySelectorAll('input, select, textarea');
+                inputs.forEach(input => {
+                    input.setAttribute('readonly', 'readonly');
+                    if (input.tagName === 'SELECT') {
+                        input.setAttribute('disabled', 'disabled');
+                    }
+                });
+
+                // Reset buttons
+                saveBtn.innerHTML = 'Guardar Cambios';
+                saveBtn.disabled = false;
+                editBtn.style.display = 'block';
+                actionButtons.style.display = 'none';
+                
+                isEditing = false;
+                showAlert('Perfil actualizado exitosamente.', 'success');
+            }, 1500);
+        }
+
+        // Avatar upload functionality
+        function initializeAvatarUpload() {
+            avatarUpload.addEventListener('click', () => {
+                avatarInput.click();
+            });
+
+            avatarInput.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    if (file.size > 5 * 1024 * 1024) { // 5MB limit
+                        showAlert('La imagen debe ser menor a 5MB.', 'error');
+                        return;
+                    }
+
+                    if (!file.type.startsWith('image/')) {
+                        showAlert('Por favor selecciona un archivo de imagen válido.', 'error');
+                        return;
+                    }
+
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        const img = document.createElement('img');
+                        img.src = e.target.result;
+                        img.style.width = '100%';
+                        img.style.height = '100%';
+                        img.style.objectFit = 'cover';
+                        img.style.borderRadius = '50%';
+                        
+                        profileAvatar.innerHTML = '';
+                        profileAvatar.appendChild(img);
+                        profileAvatar.appendChild(avatarUpload);
+                        
+                        currentAvatar = e.target.result;
+                        showAlert('Imagen de perfil actualizada.', 'success');
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+
+        // Security features
+        function initializeSecurityFeatures() {
+            const changePasswordBtn = document.getElementById('changePasswordBtn');
+            const twoFactorToggle = document.getElementById('twoFactorToggle');
+            const manageSessions = document.getElementById('manageSessions');
+            const viewHistory = document.getElementById('viewHistory');
+
+            changePasswordBtn?.addEventListener('click', () => {
+                showAlert('Funcionalidad de cambio de contraseña en desarrollo.', 'info');
+            });
+
+            twoFactorToggle?.addEventListener('change', (e) => {
+                const isEnabled = e.target.checked;
+                const message = isEnabled ? 
+                    'Autenticación de dos factores activada.' : 
+                    'Autenticación de dos factores desactivada.';
+                showAlert(message, 'success');
+            });
+
+            manageSessions?.addEventListener('click', () => {
+                showAlert('Abriendo gestor de sesiones...', 'info');
+            });
+
+            viewHistory?.addEventListener('click', () => {
+                showAlert('Cargando historial de acceso...', 'info');
+            });
+        }
+
+        // Preferences functionality
+        function initializePreferences() {
+            const savePreferences = document.getElementById('savePreferences');
+            const resetPreferences = document.getElementById('resetPreferences');
+
+            savePreferences?.addEventListener('click', () => {
+                savePreferences.innerHTML = '<span class="loading"></span> Guardando...';
+                savePreferences.disabled = true;
+
+                setTimeout(() => {
+                    savePreferences.innerHTML = 'Guardar Preferencias';
+                    savePreferences.disabled = false;
+                    showAlert('Preferencias guardadas exitosamente.', 'success');
+                }, 1000);
+            });
+
+            resetPreferences?.addEventListener('click', () => {
+                if (confirm('¿Estás seguro de restablecer todas las preferencias?')) {
+                    // Reset to default values
+                    document.getElementById('language').value = 'es';
+                    document.getElementById('timezone').value = 'America/Bogota';
+                    document.getElementById('theme').value = 'dark';
+                    document.getElementById('dateFormat').value = 'DD/MM/YYYY';
+                    
+                    // Reset checkboxes
+                    document.getElementById('emailNotifications').checked = true;
+                    document.getElementById('projectUpdates').checked = true;
+                    document.getElementById('newsletter').checked = false;
+                    document.getElementById('browserNotifications').checked = true;
+                    
+                    showAlert('Preferencias restablecidas a valores por defecto.', 'info');
+                }
+            });
+        }
+
+        // Statistics functionality
+        function initializeStatistics() {
+            const refreshStats = document.getElementById('refreshStats');
+            
+            refreshStats?.addEventListener('click', () => {
+                refreshStats.innerHTML = '🔄 Actualizando...';
+                refreshStats.disabled = true;
+                
+                setTimeout(() => {
+                    // Simulate updated stats
+                    animateStatUpdate('completedProjects', 24, 26);
+                    animateStatUpdate('activeProjects', 8, 9);
+                    animateStatUpdate('completedTasks', 156, 163);
+                    animateStatUpdate('efficiency', '95%', '97%');
+                    
+                    refreshStats.innerHTML = '🔄 Actualizar';
+                    refreshStats.disabled = false;
+                    showAlert('Estadísticas actualizadas.', 'success');
+                }, 2000);
+            });
+        }
+
+        // Utility functions
+        function showAlert(message, type = 'info') {
+            clearAlert();
+            
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type}`;
+            alert.textContent = message;
+            
+            alertContainer.appendChild(alert);
+            
+            // Auto-hide after 5 seconds
+            setTimeout(() => {
+                if (alert.parentNode) {
+                    alert.style.opacity = '0';
+                    setTimeout(() => {
+                        clearAlert();
+                    }, 300);
+                }
+            }, 5000);
+        }
+
+        function clearAlert() {
+            alertContainer.innerHTML = '';
+        }
+
+        function isValidEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+
+        function animateStatUpdate(elementId, fromValue, toValue) {
+            const element = document.getElementById(elementId);
+            if (!element) return;
+            
+            element.style.animation = 'pulse 0.5s ease-in-out';
+            
+            setTimeout(() => {
+                element.textContent = toValue;
+                element.style.animation = '';
+            }, 250);
+        }
+
+        // Add smooth scrolling and enhanced interactions
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Add keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey || e.metaKey) {
+                switch(e.key) {
+                    case 's':
+                        e.preventDefault();
+                        if (isEditing) {
+                            saveProfile();
+                        }
+                        break;
+                    case 'Escape':
+                        if (isEditing) {
+                            exitEditMode();
+                        }
+                        break;
+                }
+            }
+        });
+
+        // Add form validation on input
+        profileForm.addEventListener('input', function(e) {
+            if (isEditing) {
+                const input = e.target;
+                validateField(input);
+            }
+        });
+
+        function validateField(input) {
+            const value = input.value.trim();
+            
+            // Remove previous validation classes
+            input.classList.remove('valid', 'invalid');
+            
+            switch(input.type) {
+                case 'email':
+                    if (value && !isValidEmail(value)) {
+                        input.classList.add('invalid');
+                    } else if (value) {
+                        input.classList.add('valid');
+                    }
+                    break;
+                case 'tel':
+                    const phoneRegex = /^[\+]?[1-9][\d]{0,15}$/;
+                    if (value && !phoneRegex.test(value.replace(/\s/g, ''))) {
+                        input.classList.add('invalid');
+                    } else if (value) {
+                        input.classList.add('valid');
+                    }
+                    break;
+                default:
+                    if (input.hasAttribute('required') && !value) {
+                        input.classList.add('invalid');
+                    } else if (value) {
+                        input.classList.add('valid');
+                    }
+            }
+        }
+
+        // Add enhanced hover effects
+        document.querySelectorAll('.stat-card, .security-item').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-5px) scale(1.02)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+    </script>
+</body>
+</html>
