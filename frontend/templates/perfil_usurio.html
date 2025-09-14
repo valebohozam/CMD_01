@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ProBuild - Mi Perfil</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #ff6b35;
+            --secondary-color: #1a1a2e;
+            --accent-color: #0f4c75;
+            --text-light: #ffffff;
+            --text-dark: #2c3e50;
+            --background-light: #f8f9fa;
+            --gradient-primary: linear-gradient(135deg, #ff6b35 0%, #ff8c42 100%);
+            --gradient-secondary: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            --shadow-primary: 0 20px 60px rgba(255, 107, 53, 0.3);
+            --shadow-secondary: 0 10px 30px rgba(0, 0, 0, 0.2);
+            --error-color: #e74c3c;
+            --success-color: #27ae60;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            overflow-x: hidden;
+            background: var(--gradient-secondary);
+            min-height: 100vh;
+        }
+
+        /* Animated Background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            animation: gridMove 20s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(10px, 10px); }
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1rem 0;
+            background: rgba(26, 26, 46, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--text-light);
+            text-decoration: none;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a.active {
+            color: var(--primary-color);
+        }
+
+        .user-menu {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-light);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .user-avatar:hover {
+            transform: scale(1.05);
+        }
+
+        /* Profile Container */
+        .profile-page {
+            padding: 6rem 2rem 2rem;
+            min-height: 100vh;
+        }
+
+        .profile-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 2rem;
+            animation: slideInUp 1s ease-out;
+        }
+
+        /* Profile Sidebar */
+        .profile-sidebar {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            height: fit-content;
+            box-shadow: var(--shadow-secondary);
+        }
+
+        .profile-avatar-section {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .profile-avatar-large {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-light);
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin: 0 auto 1rem;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .profile-avatar-large:hover {
+            transform: scale(1.05);
+        }
+
+        .avatar-upload {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 35px;
+            height: 35px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: 3px solid rgba(255, 255, 255, 0.2);
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .avatar-upload:hover {
+            background: var(--accent-color);
+        }
+
+        .profile-name {
+            color: var(--text-light);
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .profile-role {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1rem;
+        }
+
+        .profile-menu {
+            list-style: none;
+        }
+
+        .profile-menu li {
+            margin-bottom: 0.5rem;
+        }
+
+        .profile-menu a {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            padding: 1rem;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .profile-menu a.active {
+            background: rgba(255, 107, 53, 0.2);
+            color: var(--primary-color);
+            border: 1px solid rgba(255, 107, 53, 0.3);
+        }
+
+        .profile-menu a:hover:not(.active) {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Profile Content */
+        .profile-content {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: var(--shadow-secondary);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-light);
+        }
+
+        .edit-btn {
+            background: var(--gradient-primary);
+            color: var(--text-light);
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-left: auto;
+        }
+
+        .edit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(255, 107, 53, 0.4);
+        }
+
+        /* Form Styles */
+        .profile-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            position: relative;
+        }
+
+        .form-group.full-width {
+            grid-column: span 2;
+        }
+
+        .form-group label {
+            display: block;
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            color: var(--text-light);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.2);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .form-group input:read-only {
+            background: rgba(255, 255, 255, 0.05);
+            cursor: not-allowed;
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        /* Statistics Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            justify-content: flex-end;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: var(--text-light);
+            box-shadow: var(--shadow-primary);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(255, 107, 53, 0.4);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Alert Messages */
+        .alert {
+            padding: 1rem;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            animation: slideInDown 0.3s ease-out;
+        }
+
+        .alert-success {
+            background: rgba(39, 174, 96, 0.2);
+            color: #2ecc71;
+            border: 1px solid rgba(39, 174, 96, 0.3);
+        }
+
+        /* Animations */
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Security Settings */
+        .security-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .security-item:last-child {
+            border-bottom: none;
+        }
+
+        .security-info h4 {
+            color: var(--text-light);
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .security-info p {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .profile-container {
+                grid-template-columns: 1fr;
+            }
+
+            .profile-sidebar {
+                order: 2;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .profile-page {
+                padding: 5rem 1rem 2rem;
+            }
+
+            .profile-form {
+                grid-template-columns: 1fr;
+            }
+
+            .form-group.full-width {
+                grid-column: span 1;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">ProBuild</a>
+            <ul class="nav-links">
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="proyectos.html">Proyectos</a></li>
+                <li><a href="reportes.html">Reportes</a></li>
+                <li><a href="contacto.html">Contacto</a></li>
+            </ul>
+            <div class="user-menu">
+                <div class="user-avatar">JD</div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Profile Page -->
+    <div class="profile-page">
+        <div class="profile-container">
+            <!-- Sidebar -->
+            <div class="profile-sidebar">
+                <div class="profile-avatar-section">
+                    <div class="profile-avatar-large" id="profileAvatar">
+                        JD
+                        <div class="avatar-upload" id="avatarUpload">📷</div>
+                    </div>
+                    <input type="file" id="avatarInput" accept="image/*" style="display: none;">
+                    <div class="profile-name">Juan Pérez</div>
+                    <div class="profile-role">Arquitecto Senior</div>
+                </div>
+
+                <ul class="profile-menu">
+                    <li><a href="#" class="menu-link active" data-section="info">👤 Información Personal</a></li>
+                    <li><a href="#" class="menu-link" data-section="stats">📊 Estadísticas</a></li>
+                    <li><a href="#" class="menu-link" data-section="security">🔒 Seguridad</a></li>
+                    <li><a href="#" class="menu-link" data-section="preferences">⚙️ Preferencias</a></li>
+                </ul>
+            </div>
+
+            <!-- Content -->
+            <div class="profile-content">
+                <div id="alert-container"></div>
+
+                <!-- Personal Information Section -->
+                <div class="content-section" id="info-section">
+                    <div class="section-header">
+                        <h2 class="section-title">Información Personal</h2>
+                        <button class="edit-btn" id="editBtn">Editar</button>
+                    </div>
+
+                    <form class="profile-form" id="profileForm">
+                        <div class="form-group">
+                            <label for="firstName">Nombre</label>
+                            <input type="text" id="firstName" name="firstName" value="Juan" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="lastName">Apellido</label>
+                            <input type="text" id="lastName" name="lastName" value="Pérez" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Correo Electrónico</label>
+                            <input type="email" id="email" name="email" value="juan.perez@probuild.com" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Teléfono</label>
+                            <input type="tel" id="phone" name="phone" value="+57 310 123 4567" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="company">Empresa</label>
+                            <input type="text" id="company" name="company" value="Constructora ABC" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="role">Cargo</label>
+                            <select id="role" name="role" disabled>
+                                <option value="arquitecto" selected>Arquitecto</option>
+                                <option value="ingeniero">Ingeniero Civil</option>
+                                <option value="constructor">Constructor</option>
+                                <option value="director">Director de Proyecto</option>
+                                <option value="supervisor">Supervisor</option>
+                                <option value="otro">Otro</option>
+                            </select>
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="bio">Biografía</label>
+                            <textarea id="bio" name="bio" placeholder="Cuéntanos sobre ti y tu experiencia..." readonly>Arquitecto con más de 10 años de experiencia en proyectos residenciales y comerciales. Especializado en diseño sostenible y gestión de proyectos de gran escala.</textarea>
+                        </div>
+                    </form>
+
+                    <div class="action-buttons" id="actionButtons" style="display: none;">
+                        <button class="btn btn-secondary" id="cancelBtn">Cancelar</button>
+                        <button class="btn btn-primary" id="saveBtn">Guardar Cambios</button>
+                    </div>
+                </div>
+
+                <!-- Statistics Section -->
+                <div class="content-section" id="stats-section" style="display: none;">
+                    <div class="section-header">
+                        <h2 class="section-title">Estadísticas</h2>
+                    </div>
+
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-number">24</div>
+                            <div class="stat-label">Proyectos Completados</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">8</div>
+                            <div class="stat-label">Proyectos Activos</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">156</div>
+                            <div class="stat-label">Tareas Completadas</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">95%</div>
+                            <div class="stat-label">Eficiencia</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label>Proyectos Recientes</label>
+                        <div style="background: rgba(255, 255, 255, 0.05); padding: 1rem; border-radius: 8px; margin-top: 0.5rem;">
+                            <p style="color: rgba(255, 255, 255, 0.8); margin-bottom: 0.5rem;">• Torre Empresarial Centro - Completado</p>
+                            <p style="color: rgba(255, 255, 255, 0.8); margin-bottom: 0.5rem;">• Conjunto Residencial Alameda - En Progreso</p>
+                            <p style="color: rgba(255, 255, 255, 0.8);">• Centro Comercial Plaza Norte - En Progreso</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Security Section -->
+                <div class="content-section" id="security-section" style="display: none;">
+                    <div class="section-header">
+                        <h2 class="section-title">Seguridad</h2>
+                    </div>
+
+                    <div class="security-item">
+                        <div class="security-info">
+                            <h4>Contraseña</h4>
+                            <p>Última actualización: hace 2 meses</p>
+                        </div>
+                        <button class="btn btn-primary">Cambiar</button>
+                    </div>
+
+                    <div class="security-item">
+                        <div class="security-info">
+                            <h4>Autenticación de dos factores</h4>
+                            <p>Protege tu cuenta con verificación adicional</p>
+                        </div>
+                        <button class="btn btn-secondary">Activar</button>
+                    </div>
+
+                    <div class="security-item">
+                        <div class="security-info">
+                            <h4>Sesiones activas</h4>
+                            <p>Gestiona tus dispositivos conectados</p>
+                        </div>
+                        <button class="btn btn-secondary">Ver</button>
+                    </div>
+                </div>
+
+                <!-- Preferences Section -->
+                <div class="content-section" id="preferences-section" style="display: none;">
+                    <div class="section-header">
+                        <h2 class="section-title">Preferencias</h2>
+                    </div>
+
+                    <form class="profile-form">
+                        <div class="form-group">
+                            <label for="language">Idioma</label>
+                            <select id="language" name="language">
+                                <option value="es" selected>Español</option>
+                                <option value="en">English</option>
+                                <option value="pt">Português</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="timezone">Zona Horaria</label>
+                            <select id="timezone" name="timezone">
+                                <option value="America/Bogota" selected>Bogotá (GMT-5)</option>
+                                <option value="America/Mexico_City">México (GMT-6)</option>
+                                <option value="America/Argentina/Buenos_Aires">Buenos Aires (GMT-3)</option>
+                            </select>
+                        </div>
+                        <div class="form-group full-width">
+                            <label>Notificaciones</label>
+                            <div style="display: flex; flex-direction: column; gap: 1rem; margin-top: 0.5rem;">
+                                <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                                    <input type="checkbox" checked style="accent-color: var(--primary-color);">
+                                    <span style="color: rgba(255, 255, 255, 0.8);">Notificaciones por email</span>
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                                    <input type="checkbox" checked style="accent-color: var(--primary-color);">
+                                    <span style="color: rgba(255, 255, 255, 0.8);">Actualizaciones de proyecto</span>
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                                    <input type="checkbox" style="accent-color: var(--primary-color);">
+                                    <span style="color: rgba(255, 255, 255, 0.8);">Newsletter semanal</span>
+                                </label>
+                            </div>
+                        </div>
+                    </form>
+
+                    <div class="action-buttons">
+                        <button class="btn btn-primary">Guardar Preferencias</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Section Navigation
+        const menuLinks = document.querySelectorAll('.menu-link');
+        const contentSections = document.querySelectorAll('.content-section');
+
+        menuLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                
+                // Remove active class from all links
+                menuLinks.forEach(l => l.classList.remove('active'));
+                // Add active class to clicked link
+                link.classList.add('active');
+
+                // Hide all sections
+                contentSections.forEach(section => section.style.display = 'none');
+                
+                // Show target section
+                const targetSection = link.dataset.section + '-section';
+                document.getElementById(targetSection).style.display = 'block';
+            });
+        });
+
+        // Edit Profile Functionality
+        const editBtn = document.getElementById('editBtn');
+        const cancelBtn = document.getElementById('cancelBtn');
+        const saveBtn = document.getElementById('saveBtn');
+        const actionButtons = document.getElementById('actionButtons');
+        const profileForm = document.getElementById('profileForm');
+        const alertContainer = document.getElementById('alert-container');
+
+        let originalData = {};
+
+        editBtn.addEventListener('click', () => {
+            // Store original data
+            const formData = new FormData(profileForm);
+            originalData = Object.fromEntries(formData);
+
+            // Enable form fields
+            const inputs = profileForm.querySelectorAll('input, select, textarea');
+            inputs.forEach(input => {
+                input.removeAttribute('readonly');
+                input.removeAttribute('disabled');
+            });
+
+            // Show action buttons, hide edit button
+            editBtn.style.display = 'none';
+            actionButtons.style.display = 'flex';
+        });
+
+        cancelBtn.addEventListener('click', () => {
+            // Restore original data
+            Object.keys(originalData).forEach(key => {
+                const field = profileForm.querySelector(`[name="${key}"]`);
+                if (field) field.value = originalData[key];
+            });
+
+            // Disable form fields
+            const inputs = profileForm.querySelectorAll('input, select, textarea');
+            inputs.forEach(input => {
+                if (input.type !== 'email') {
+                    input.setAttribute('readonly', 'readonly');
+                } else {
+                    input.setAttribute('readonly', 'readonly');
+                }
+                if (input.tagName === 'SELECT') {
+                    input.setAttribute('disabled', 'disabled');
+                }
+            });
+
+            // Hide action buttons, show edit button
+            editBtn.style.display = 'block';
+            actionButtons.style.display = 'none';
+            clearAlert();
+        });
+
+        saveBtn.addEventListener('click', () => {
+            // Simulate save
+            saveBtn.textContent = 'Guardando...';
+            saveBtn.disabled = true;
+
+            setTimeout(() => {
+                // Update profile display
+                const firstName = document.getElementById('firstName').value;

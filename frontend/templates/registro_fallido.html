@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ProBuild - Error en el Registro</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #ff6b35;
+            --secondary-color: #1a1a2e;
+            --accent-color: #0f4c75;
+            --text-light: #ffffff;
+            --text-dark: #2c3e50;
+            --background-light: #f8f9fa;
+            --gradient-primary: linear-gradient(135deg, #ff6b35 0%, #ff8c42 100%);
+            --gradient-secondary: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            --shadow-primary: 0 20px 60px rgba(255, 107, 53, 0.3);
+            --shadow-secondary: 0 10px 30px rgba(0, 0, 0, 0.2);
+            --error-color: #e74c3c;
+            --error-gradient: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            --warning-color: #f39c12;
+            --warning-gradient: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .error-page {
+            position: relative;
+            min-height: 100vh;
+            background: var(--gradient-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            overflow: hidden;
+        }
+
+        .error-page::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(10px, 10px); }
+        }
+
+        /* Floating Error Elements */
+        .floating-element {
+            position: absolute;
+            border-radius: 50%;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .floating-element:nth-child(1) {
+            width: 120px;
+            height: 120px;
+            top: 15%;
+            left: 10%;
+            background: rgba(231, 76, 60, 0.15);
+            animation-delay: 0s;
+        }
+
+        .floating-element:nth-child(2) {
+            width: 80px;
+            height: 80px;
+            top: 70%;
+            right: 15%;
+            background: rgba(243, 156, 18, 0.1);
+            animation-delay: 2s;
+        }
+
+        .floating-element:nth-child(3) {
+            width: 100px;
+            height: 100px;
+            bottom: 20%;
+            left: 75%;
+            background: rgba(231, 76, 60, 0.1);
+            animation-delay: 4s;
+        }
+
+        @keyframes float {
+            0%, 100% { 
+                transform: translateY(0px) rotate(0deg) scale(1); 
+            }
+            33% { 
+                transform: translateY(-30px) rotate(120deg) scale(1.1); 
+            }
+            66% { 
+                transform: translateY(15px) rotate(240deg) scale(0.9); 
+            }
+        }
+
+        /* Error Container */
+        .error-container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 3.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            max-width: 600px;
+            width: 100%;
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            box-shadow: var(--shadow-secondary);
+            animation: errorAnimation 1.2s ease-out;
+        }
+
+        @keyframes errorAnimation {
+            0% {
+                opacity: 0;
+                transform: translateY(50px) scale(0.9);
+            }
+            70% {
+                transform: translateY(-10px) scale(1.02);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* Error Icon */
+        .error-icon {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 2rem;
+            background: var(--error-gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            animation: iconShake 2s ease-in-out infinite;
+            box-shadow: 0 20px 40px rgba(231, 76, 60, 0.3);
+        }
+
+        @keyframes iconShake {
+            0%, 100% { 
+                transform: scale(1); 
+                box-shadow: 0 20px 40px rgba(231, 76, 60, 0.3);
+            }
+            10%, 30%, 50%, 70%, 90% {
+                transform: scale(1.02) rotate(-2deg);
+            }
+            20%, 40%, 60%, 80% {
+                transform: scale(1.02) rotate(2deg);
+            }
+        }
+
+        .error-icon::before {
+            content: '✕';
+            font-size: 3.5rem;
+            color: var(--text-light);
+            font-weight: bold;
+            animation: crossDraw 0.8s ease-out 0.5s both;
+        }
+
+        @keyframes crossDraw {
+            0% {
+                opacity: 0;
+                transform: scale(0) rotate(180deg);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.2) rotate(90deg);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) rotate(0deg);
+            }
+        }
+
+        /* Error Header */
+        .error-header h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            color: var(--text-light);
+            margin-bottom: 1rem;
+            animation: titleSlide 1s ease-out 0.3s both;
+        }
+
+        @keyframes titleSlide {
+            0% {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .error-header .highlight {
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .error-header .error-text {
+            background: var(--error-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Error Message */
+        .error-message {
+            margin-bottom: 2.5rem;
+            animation: messageSlide 1s ease-out 0.5s both;
+        }
+
+        @keyframes messageSlide {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .error-message p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1.2rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .error-message .error-details {
+            background: rgba(231, 76, 60, 0.15);
+            border: 1px solid rgba(231, 76, 60, 0.3);
+            padding: 1.5rem;
+            border-radius: 16px;
+            margin-top: 1.5rem;
+        }
+
+        .error-message .error-details h3 {
+            color: #e74c3c;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .error-message .error-details ul {
+            text-align: left;
+            padding-left: 1rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .error-message .error-details li {
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        /* Help Section */
+        .help-section {
+            background: rgba(243, 156, 18, 0.1);
+            border: 1px solid rgba(243, 156, 18, 0.2);
+            padding: 1.5rem;
+            border-radius: 16px;
+            margin: 1.5rem 0;
+            animation: helpSlide 1s ease-out 0.6s both;
+        }
+
+        @keyframes helpSlide {
+            0% {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .help-section h3 {
+            color: #f39c12;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .help-section p {
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.7);
+            text-align: left;
+        }
+
+        /* Action Buttons */
+        .error-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            animation: actionsSlide 1s ease-out 0.7s both;
+        }
+
+        @keyframes actionsSlide {
+            0% {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: var(--text-light);
+            padding: 1.2rem 2.5rem;
+            border: none;
+            border-radius: 16px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-primary);
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 25px 70px rgba(255, 107, 53, 0.4);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-light);
+            padding: 1rem 2rem;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 16px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .btn-contact {
+            background: var(--warning-gradient);
+            color: var(--text-light);
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 16px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 15px 40px rgba(243, 156, 18, 0.3);
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-contact:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 50px rgba(243, 156, 18, 0.4);
+        }
+
+        /* Error Code Display */
+        .error-code {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 1rem;
+            margin: 2rem 0;
+            font-family: 'Courier New', monospace;
+            animation: codeSlide 1s ease-out 0.8s both;
+        }
+
+        @keyframes codeSlide {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .error-code .code-label {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .error-code .code-value {
+            color: #e74c3c;
+            font-weight: 600;
+            font-size: 1.1rem;
+            letter-spacing: 1px;
+        }
+
+        /* Retry Info */
+        .retry-info {
+            margin-top: 2rem;
+            padding: 1rem;
+            background: rgba(255, 107, 53, 0.1);
+            border: 1px solid rgba(255, 107, 53, 0.2);
+            border-radius: 12px;
+            animation: retrySlide 1s ease-out 0.9s both;
+        }
+
+        @keyframes retrySlide {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .retry-info p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .error-page {
+                padding: 1rem;
+            }
+
+            .error-container {
+                padding: 2.5rem 2rem;
+            }
+
+            .error-header h1 {
+                font-size: 2.2rem;
+            }
+
+            .error-icon {
+                width: 100px;
+                height: 100px;
+            }
+
+            .error-icon::before {
+                font-size: 3rem;
+            }
+
+            .error-actions {
+                gap: 1.5rem;
+            }
+
+            .error-message .error-details ul {
+                padding-left: 0.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .error-container {
+                padding: 2rem 1.5rem;
+            }
+
+            .error-header h1 {
+                font-size: 2rem;
+            }
+
+            .error-message p {
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="error-page">
+        <div class="floating-element"></div>
+        <div class="floating-element"></div>
+        <div class="floating-element"></div>
+        
+        <div class="error-container">
+            <div class="error-icon"></div>
+            
+            <div class="error-header">
+                <h1><span class="error-text">Error</span> en <span class="highlight">ProBuild</span></h1>
+            </div>
+
+            <div class="error-message">
+                <p>Lo sentimos, no pudimos completar tu registro. Ha ocurrido un error durante el proceso.</p>
+                
+                <div class="error-details">
+                    <h3>🚨 Posibles causas del error</h3>
+                    <ul>
+                        <li>El email ya está registrado en nuestro sistema</li>
+                        <li>Conexión inestable durante el proceso</li>
+                        <li>Datos incompletos o inválidos</li>
+                        <li>Error temporal del servidor</li>
+                        <li>Contraseña no cumple con los requisitos de seguridad</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="help-section">
+                <h3>💡 ¿Qué puedes hacer?</h3>
+                <p>Verifica que todos los campos estén completos y correctos, asegúrate de tener una conexión estable a internet, y si el problema persiste, no dudes en contactarnos.</p>
+            </div>
+
+            <div class="error-code">
+                <div class="code-label">Código de error:</div>
+                <div class="code-value" id="errorCode">REG_FAILED_001</div>
+            </div>
+
+            <div class="error-actions">
+                <a href="register.html" class="btn-primary" id="retryBtn">Intentar de Nuevo</a>
+                <a href="contact.html" class="btn-contact">Contactar Soporte</a>
+                <a href="index.html" class="btn-secondary">Volver al Inicio</a>
+            </div>
+
+            <div class="retry-info">
+                <p>Si el problema persiste después de varios intentos, por favor contacta a nuestro equipo de soporte técnico.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Generate random error code
+        function generateErrorCode() {
+            const codes = [
+                'REG_FAILED_001', 'REG_EMAIL_EXISTS', 'REG_TIMEOUT_002', 
+                'REG_INVALID_DATA', 'REG_SERVER_ERROR', 'REG_CONN_FAILED'
+            ];
+            return codes[Math.floor(Math.random() * codes.length)];
+        }
+
+        // Update error code
+        function updateErrorCode() {
+            const errorCodeElement = document.getElementById('errorCode');
+            errorCodeElement.textContent = generateErrorCode();
+        }
+
+        // Add shake animation to retry button
+        function addRetryShake() {
+            const retryBtn = document.getElementById('retryBtn');
+            
+            setInterval(() => {
+                retryBtn.style.animation = 'none';
+                setTimeout(() => {
+                    retryBtn.style.animation = 'retryShake 0.5s ease-in-out';
+                }, 50);
+            }, 5000);
+        }
+
+        // Add CSS for retry button shake
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes retryShake {
+                0%, 100% { transform: translateX(0); }
+                25% { transform: translateX(-5px); }
+                75% { transform: translateX(5px); }
+            }
+            
+            .btn-primary:hover {
+                animation: none !important;
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Add loading states for buttons
+        function addButtonLoadingStates() {
+            const buttons = document.querySelectorAll('.btn-primary, .btn-contact');
+            
+            buttons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    if (this.classList.contains('btn-primary')) {
+                        e.preventDefault();
+                        this.textContent = 'Redirigiendo...';
+                        setTimeout(() => {
+                            window.location.href = this.href;
+                        }, 1000);
+                    } else if (this.classList.contains('btn-contact')) {
+                        e.preventDefault();
+                        this.textContent = 'Abriendo soporte...';
+                        setTimeout(() => {
+                            window.location.href = this.href;
+                        }, 800);
+                    }
+                });
+            });
+        }
+
+        // Error particles animation
+        function createErrorParticles() {
+            const colors = ['#e74c3c', '#c0392b', '#f39c12', '#d35400'];
+            const particleCount = 30;
+            
+            for (let i = 0; i < particleCount; i++) {
+                setTimeout(() => {
+                    const particle = document.createElement('div');
+                    particle.style.position = 'fixed';
+                    particle.style.left = Math.random() * 100 + 'vw';
+                    particle.style.top = '-10px';
+                    particle.style.width = (Math.random() * 8 + 4) + 'px';
+                    particle.style.height = (Math.random() * 8 + 4) + 'px';
+                    particle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    particle.style.pointerEvents = 'none';
+                    particle.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+                    particle.style.zIndex = '9999';
+                    particle.style.animation = `particleFall ${3 + Math.random() * 4}s linear forwards`;
+                    
+                    document.body.appendChild(particle);
+                    
+                    setTimeout(() => {
+                        particle.remove();
+                    }, 7000);
+                }, i * 100);
+            }
+        }
+
+        // Add particle animation CSS
+        const particleStyle = document.createElement('style');
+        particleStyle.textContent = `
+            @keyframes particleFall {
+                0% {
+                    transform: translateY(-10px) rotate(0deg);
+                    opacity: 1;
+                }
+                100% {
+                    transform: translateY(100vh) rotate(360deg);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(particleStyle);
+
+        // Get error details from URL parameters
+        function getErrorDetails() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return {
+                code: urlParams.get('error') || generateErrorCode(),
+                message: urlParams.get('message') || 'Error desconocido durante el registro'
+            };
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            updateErrorCode();
+            addRetryShake();
+            addButtonLoadingStates();
+            
+            // Get error details from URL if available
+            const errorDetails = getErrorDetails();
+            if (errorDetails.code !== generateErrorCode()) {
+                document.getElementById('errorCode').textContent = errorDetails.code;
+            }
+            
+            // Trigger error particles after animation completes
+            setTimeout(createErrorParticles, 1200);
+            
+            // Optional: Log error for debugging
+            console.error('Registration failed:', errorDetails);
+        });
+    </script>
+</body>
+</html>
