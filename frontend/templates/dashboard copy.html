@@ -1,0 +1,1457 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ProBuild - Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #ff6b35;
+            --secondary-color: #1a1a2e;
+            --accent-color: #0f4c75;
+            --text-light: #ffffff;
+            --text-dark: #2c3e50;
+            --background-light: #f8f9fa;
+            --gradient-primary: linear-gradient(135deg, #ff6b35 0%, #ff8c42 100%);
+            --gradient-secondary: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            --shadow-primary: 0 20px 60px rgba(255, 107, 53, 0.3);
+            --shadow-secondary: 0 10px 30px rgba(0, 0, 0, 0.2);
+            --card-bg: #ffffff;
+            --border-color: #e9ecef;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+            --info-color: #17a2b8;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background: var(--background-light);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 280px;
+            height: 100vh;
+            background: var(--gradient-secondary);
+            padding: 2rem 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-header {
+            padding: 0 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .sidebar-logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--text-light);
+            text-decoration: none;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .sidebar-nav {
+            list-style: none;
+        }
+
+        .nav-item {
+            margin-bottom: 0.5rem;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 1rem 2rem;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--text-light);
+            background: rgba(255, 107, 53, 0.1);
+        }
+
+        .nav-link.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: var(--gradient-primary);
+        }
+
+        .nav-icon {
+            margin-right: 1rem;
+            font-size: 1.2rem;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 280px;
+            padding: 2rem;
+            min-height: 100vh;
+        }
+
+        /* Mobile Menu Toggle */
+        .mobile-menu-toggle {
+            display: none;
+            position: fixed;
+            top: 1rem;
+            left: 1rem;
+            z-index: 1001;
+            background: var(--gradient-primary);
+            border: none;
+            padding: 0.75rem;
+            border-radius: 10px;
+            color: white;
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+
+        /* Top Bar */
+        .top-bar {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 1.5rem 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-secondary);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .page-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-light);
+            font-weight: 600;
+        }
+
+        .user-details {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .user-name {
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .user-role {
+            font-size: 0.8rem;
+            color: #6c757d;
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: var(--shadow-secondary);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-primary);
+        }
+
+        .stat-card.success::before {
+            background: var(--success-color);
+        }
+
+        .stat-card.warning::before {
+            background: var(--warning-color);
+        }
+
+        .stat-card.info::before {
+            background: var(--info-color);
+        }
+
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--text-light);
+        }
+
+        .stat-card .stat-icon {
+            background: var(--gradient-primary);
+        }
+
+        .stat-card.success .stat-icon {
+            background: var(--success-color);
+        }
+
+        .stat-card.warning .stat-icon {
+            background: var(--warning-color);
+        }
+
+        .stat-card.info .stat-icon {
+            background: var(--info-color);
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+            counter-reset: none;
+        }
+
+        .stat-label {
+            color: #6c757d;
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+
+        .stat-trend {
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .stat-trend.positive {
+            color: var(--success-color);
+        }
+
+        .stat-trend.negative {
+            color: var(--danger-color);
+        }
+
+        /* Charts Section */
+        .charts-section {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .chart-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: var(--shadow-secondary);
+        }
+
+        .chart-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--text-dark);
+        }
+
+        .chart-placeholder {
+            height: 300px;
+            background: linear-gradient(45deg, var(--background-light), #e9ecef);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6c757d;
+            font-weight: 500;
+            border: 2px dashed #dee2e6;
+        }
+
+        .progress-chart {
+            height: 300px;
+        }
+
+        .progress-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .progress-item:last-child {
+            border-bottom: none;
+        }
+
+        .progress-info {
+            flex: 1;
+        }
+
+        .progress-name {
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--border-color);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--gradient-primary);
+            border-radius: 4px;
+            transition: width 1s ease;
+        }
+
+        .progress-percentage {
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-left: 1rem;
+        }
+
+        /* Tables */
+        .table-section {
+            margin-bottom: 3rem;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: var(--text-light);
+            box-shadow: var(--shadow-primary);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 25px 70px rgba(255, 107, 53, 0.4);
+        }
+
+        .table-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            box-shadow: var(--shadow-secondary);
+            overflow: hidden;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table th,
+        .table td {
+            padding: 1.25rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .table th {
+            background: var(--background-light);
+            font-weight: 600;
+            color: var(--text-dark);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .table tr:hover {
+            background: rgba(255, 107, 53, 0.05);
+        }
+
+        .status-badge {
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-active {
+            background: rgba(40, 167, 69, 0.15);
+            color: var(--success-color);
+        }
+
+        .status-pending {
+            background: rgba(255, 193, 7, 0.15);
+            color: var(--warning-color);
+        }
+
+        .status-completed {
+            background: rgba(23, 162, 184, 0.15);
+            color: var(--info-color);
+        }
+
+        .status-inactive {
+            background: rgba(220, 53, 69, 0.15);
+            color: var(--danger-color);
+        }
+
+        .user-avatar-table {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            color: var(--text-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .project-progress {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .progress-bar-small {
+            width: 80px;
+            height: 6px;
+            background: var(--border-color);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-fill-small {
+            height: 100%;
+            background: var(--gradient-primary);
+            border-radius: 3px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-small {
+            padding: 0.5rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-edit {
+            background: rgba(23, 162, 184, 0.15);
+            color: var(--info-color);
+        }
+
+        .btn-delete {
+            background: rgba(220, 53, 69, 0.15);
+            color: var(--danger-color);
+        }
+
+        .btn-small:hover {
+            transform: scale(1.1);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background-color: var(--card-bg);
+            margin: 5% auto;
+            padding: 2rem;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: var(--shadow-secondary);
+            animation: modalSlideIn 0.3s ease;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: var(--danger-color);
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .charts-section {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .mobile-menu-toggle {
+                display: block;
+            }
+
+            .sidebar {
+                width: 260px;
+                transform: translateX(-100%);
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 1rem;
+                padding-top: 4rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 1rem;
+            }
+
+            .top-bar {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .section-header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .table-card {
+                overflow-x: auto;
+            }
+
+            .table {
+                min-width: 600px;
+            }
+        }
+
+        /* Animations */
+        .fade-in {
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .slide-in {
+            animation: slideIn 0.6s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Loading Spinner */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Mobile Menu Toggle -->
+    <button class="mobile-menu-toggle" id="mobileMenuToggle">☰</button>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <a href="#" class="sidebar-logo">ProBuild</a>
+        </div>
+        <ul class="sidebar-nav">
+            <li class="nav-item">
+                <a href="#" class="nav-link active" data-section="dashboard">
+                    <span class="nav-icon">📊</span>
+                    Dashboard
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link" data-section="proyectos">
+                    <span class="nav-icon">🏗️</span>
+                    Proyectos
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link" data-section="usuarios">
+                    <span class="nav-icon">👥</span>
+                    Usuarios
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link" data-section="calendario">
+                    <span class="nav-icon">📅</span>
+                    Calendario
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link" data-section="finanzas">
+                    <span class="nav-icon">💰</span>
+                    Finanzas
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link" data-section="reportes">
+                    <span class="nav-icon">📋</span>
+                    Reportes
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link" data-section="configuracion">
+                    <span class="nav-icon">⚙️</span>
+                    Configuración
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link" onclick="logout()">
+                    <span class="nav-icon">🚪</span>
+                    Salir
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Top Bar -->
+        <div class="top-bar fade-in">
+            <h1 class="page-title">Dashboard</h1>
+            <div class="user-info">
+                <div class="user-avatar">AM</div>
+                <div class="user-details">
+                    <span class="user-name">Alejandro Martínez</span>
+                    <span class="user-role">Administrador</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="stats-grid fade-in">
+            <div class="stat-card" onclick="showSection('proyectos')">
+                <div class="stat-icon">🏗️</div>
+                <div class="stat-value" data-target="24">0</div>
+                <div class="stat-label">Proyectos Activos</div>
+                <div class="stat-trend positive">↗ +12% este mes</div>
+            </div>
+            <div class="stat-card success" onclick="showSection('proyectos')">
+                <div class="stat-icon">✅</div>
+                <div class="stat-value" data-target="156">0</div>
+                <div class="stat-label">Proyectos Completados</div>
+                <div class="stat-trend positive">↗ +8% este mes</div>
+            </div>
+            <div class="stat-card warning" onclick="showSection('usuarios')">
+                <div class="stat-icon">👥</div>
+                <div class="stat-value" data-target="89">0</div>
+                <div class="stat-label">Usuarios Activos</div>
+                <div class="stat-trend positive">↗ +15% este mes</div>
+            </div>
+            <div class="stat-card info" onclick="showSection('finanzas')">
+                <div class="stat-icon">💰</div>
+                <div class="stat-value" data-target="2.4">0</div>
+                <div class="stat-label">Ingresos Totales (M)</div>
+                <div class="stat-trend positive">↗ +22% este mes</div>
+            </div>
+        </div>
+
+        <!-- Charts Section -->
+        <div class="charts-section fade-in">
+            <div class="chart-card">
+                <h3 class="chart-title">Progreso de Proyectos - Últimos 6 Meses</h3>
+                <div class="chart-placeholder">
+                    📈 Gráfico de Progreso de Proyectos
+                </div>
+            </div>
+            <div class="chart-card">
+                <h3 class="chart-title">Proyectos por Estado</h3>
+                <div class="progress-chart">
+                    <div class="progress-item">
+                        <div class="progress-info">
+                            <div class="progress-name">En Progreso</div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 0%;" data-width="65"></div>
+                            </div>
+                        </div>
+                        <div class="progress-percentage">65%</div>
+                    </div>
+                    <div class="progress-item">
+                        <div class="progress-info">
+                            <div class="progress-name">Completados</div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 0%;" data-width="75"></div>
+                            </div>
+                        </div>
+                        <div class="progress-percentage">75%</div>
+                    </div>
+                    <div class="progress-item">
+                        <div class="progress-info">
+                            <div class="progress-name">Pendientes</div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 0%;" data-width="45"></div>
+                            </div>
+                        </div>
+                        <div class="progress-percentage">45%</div>
+                    </div>
+                    <div class="progress-item">
+                        <div class="progress-info">
+                            <div class="progress-name">Cancelados</div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 0%;" data-width="15"></div>
+                            </div>
+                        </div>
+                        <div class="progress-percentage">15%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Projects Table -->
+        <div class="table-section slide-in">
+            <div class="section-header">
+                <h2 class="section-title">Proyectos Recientes</h2>
+                <a href="#" class="btn btn-primary" onclick="openModal('projectModal')">
+                    ➕ Nuevo Proyecto
+                </a>
+            </div>
+            <div class="table-card">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Proyecto</th>
+                            <th>Cliente</th>
+                            <th>Progreso</th>
+                            <th>Estado</th>
+                            <th>Fecha Límite</th>
+                            <th>Presupuesto</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div class="project-progress">
+                                    <div class="progress-bar-small">
+                                        <div class="progress-fill-small" style="width: 30%;"></div>
+                                    </div>
+                                    <span>30%</span>
+                                </div>
+                            </td>
+                            <td><span class="status-badge status-active">En Progreso</span></td>
+                            <td>15 Feb 2025</td>
+                            <td>$3,500,000</td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button class="btn-small btn-edit" onclick="editProject(4)">✏️</button>
+                                    <button class="btn-small btn-delete" onclick="deleteProject(4)">🗑️</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div style="font-weight: 600;">Oficinas Corporativas Este</div>
+                                <div style="color: #6c757d; font-size: 0.9rem;">OCE-2024-005</div>
+                            </td>
+                            <td>TechCorp Solutions</td>
+                            <td>
+                                <div class="project-progress">
+                                    <div class="progress-bar-small">
+                                        <div class="progress-fill-small" style="width: 90%;"></div>
+                                    </div>
+                                    <span>90%</span>
+                                </div>
+                            </td>
+                            <td><span class="status-badge status-active">En Progreso</span></td>
+                            <td>08 Oct 2024</td>
+                            <td>$975,000</td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button class="btn-small btn-edit" onclick="editProject(5)">✏️</button>
+                                    <button class="btn-small btn-delete" onclick="deleteProject(5)">🗑️</button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Users Table -->
+        <div class="table-section slide-in">
+            <div class="section-header">
+                <h2 class="section-title">Usuarios del Sistema</h2>
+                <a href="#" class="btn btn-primary" onclick="openModal('userModal')">
+                    ➕ Nuevo Usuario
+                </a>
+            </div>
+            <div class="table-card">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Usuario</th>
+                            <th>Email</th>
+                            <th>Rol</th>
+                            <th>Estado</th>
+                            <th>Último Acceso</th>
+                            <th>Proyectos</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div style="display: flex; align-items: center; gap: 1rem;">
+                                    <div class="user-avatar-table">AM</div>
+                                    <div>
+                                        <div style="font-weight: 600;">Alejandro Martínez</div>
+                                        <div style="color: #6c757d; font-size: 0.9rem;">Administrador del Sistema</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>alejandro@probuild.com</td>
+                            <td><span class="status-badge status-active">Administrador</span></td>
+                            <td><span class="status-badge status-active">Activo</span></td>
+                            <td>Hace 2 minutos</td>
+                            <td>15</td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button class="btn-small btn-edit" onclick="editUser(1)">✏️</button>
+                                    <button class="btn-small btn-delete" onclick="deleteUser(1)">🗑️</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div style="display: flex; align-items: center; gap: 1rem;">
+                                    <div class="user-avatar-table">MG</div>
+                                    <div>
+                                        <div style="font-weight: 600;">María García</div>
+                                        <div style="color: #6c757d; font-size: 0.9rem;">Gerente de Proyectos</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>maria.garcia@probuild.com</td>
+                            <td><span class="status-badge status-info">Gerente</span></td>
+                            <td><span class="status-badge status-active">Activo</span></td>
+                            <td>Hace 15 minutos</td>
+                            <td>8</td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button class="btn-small btn-edit" onclick="editUser(2)">✏️</button>
+                                    <button class="btn-small btn-delete" onclick="deleteUser(2)">🗑️</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div style="display: flex; align-items: center; gap: 1rem;">
+                                    <div class="user-avatar-table">JL</div>
+                                    <div>
+                                        <div style="font-weight: 600;">Juan López</div>
+                                        <div style="color: #6c757d; font-size: 0.9rem;">Ingeniero Senior</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>juan.lopez@probuild.com</td>
+                            <td><span class="status-badge status-pending">Ingeniero</span></td>
+                            <td><span class="status-badge status-active">Activo</span></td>
+                            <td>Hace 1 hora</td>
+                            <td>5</td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button class="btn-small btn-edit" onclick="editUser(3)">✏️</button>
+                                    <button class="btn-small btn-delete" onclick="deleteUser(3)">🗑️</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div style="display: flex; align-items: center; gap: 1rem;">
+                                    <div class="user-avatar-table">AR</div>
+                                    <div>
+                                        <div style="font-weight: 600;">Ana Rodríguez</div>
+                                        <div style="color: #6c757d; font-size: 0.9rem;">Coordinadora</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>ana.rodriguez@probuild.com</td>
+                            <td><span class="status-badge status-pending">Coordinador</span></td>
+                            <td><span class="status-badge status-pending">Pendiente</span></td>
+                            <td>Hace 2 días</td>
+                            <td>3</td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button class="btn-small btn-edit" onclick="editUser(4)">✏️</button>
+                                    <button class="btn-small btn-delete" onclick="deleteUser(4)">🗑️</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div style="display: flex; align-items: center; gap: 1rem;">
+                                    <div class="user-avatar-table">CS</div>
+                                    <div>
+                                        <div style="font-weight: 600;">Carlos Silva</div>
+                                        <div style="color: #6c757d; font-size: 0.9rem;">Técnico</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>carlos.silva@probuild.com</td>
+                            <td><span class="status-badge status-pending">Técnico</span></td>
+                            <td><span class="status-badge status-inactive">Inactivo</span></td>
+                            <td>Hace 1 semana</td>
+                            <td>2</td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button class="btn-small btn-edit" onclick="editUser(5)">✏️</button>
+                                    <button class="btn-small btn-delete" onclick="deleteUser(5)">🗑️</button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Project Modal -->
+    <div id="projectModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('projectModal')">&times;</span>
+            <h2>Nuevo Proyecto</h2>
+            <form id="projectForm">
+                <div style="margin-bottom: 1rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Nombre del Proyecto:</label>
+                    <input type="text" style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 8px;" placeholder="Ingrese el nombre del proyecto" required>
+                </div>
+                <div style="margin-bottom: 1rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Cliente:</label>
+                    <input type="text" style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 8px;" placeholder="Ingrese el nombre del cliente" required>
+                </div>
+                <div style="margin-bottom: 1rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Presupuesto:</label>
+                    <input type="number" style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 8px;" placeholder="Ingrese el presupuesto" required>
+                </div>
+                <div style="margin-bottom: 1rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Fecha Límite:</label>
+                    <input type="date" style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 8px;" required>
+                </div>
+                <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+                    <button type="button" onclick="closeModal('projectModal')" style="padding: 0.75rem 1.5rem; border: 1px solid var(--border-color); background: white; border-radius: 8px; cursor: pointer;">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Crear Proyecto</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- User Modal -->
+    <div id="userModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('userModal')">&times;</span>
+            <h2>Nuevo Usuario</h2>
+            <form id="userForm">
+                <div style="margin-bottom: 1rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Nombre Completo:</label>
+                    <input type="text" style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 8px;" placeholder="Ingrese el nombre completo" required>
+                </div>
+                <div style="margin-bottom: 1rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Email:</label>
+                    <input type="email" style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 8px;" placeholder="Ingrese el email" required>
+                </div>
+                <div style="margin-bottom: 1rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Rol:</label>
+                    <select style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 8px;" required>
+                        <option value="">Seleccione un rol</option>
+                        <option value="administrador">Administrador</option>
+                        <option value="gerente">Gerente</option>
+                        <option value="ingeniero">Ingeniero</option>
+                        <option value="coordinador">Coordinador</option>
+                        <option value="tecnico">Técnico</option>
+                    </select>
+                </div>
+                <div style="margin-bottom: 1rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Contraseña:</label>
+                    <input type="password" style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 8px;" placeholder="Ingrese la contraseña" required>
+                </div>
+                <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+                    <button type="button" onclick="closeModal('userModal')" style="padding: 0.75rem 1.5rem; border: 1px solid var(--border-color); background: white; border-radius: 8px; cursor: pointer;">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Crear Usuario</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Mobile menu toggle
+        document.getElementById('mobileMenuToggle').addEventListener('click', function() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('active');
+        });
+
+        // Close sidebar when clicking outside on mobile
+        document.addEventListener('click', function(e) {
+            const sidebar = document.getElementById('sidebar');
+            const mobileToggle = document.getElementById('mobileMenuToggle');
+            
+            if (window.innerWidth <= 768 && !sidebar.contains(e.target) && !mobileToggle.contains(e.target)) {
+                sidebar.classList.remove('active');
+            }
+        });
+
+        // Navigation functionality
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                if (this.getAttribute('onclick')) return; // Skip logout button
+                
+                // Remove active class from all links
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                
+                // Add active class to clicked link
+                this.classList.add('active');
+                
+                // Update page title
+                const section = this.dataset.section;
+                if (section) {
+                    updatePageTitle(section);
+                }
+                
+                // Close mobile menu
+                if (window.innerWidth <= 768) {
+                    document.getElementById('sidebar').classList.remove('active');
+                }
+            });
+        });
+
+        function updatePageTitle(section) {
+            const titles = {
+                'dashboard': 'Dashboard',
+                'proyectos': 'Gestión de Proyectos',
+                'usuarios': 'Gestión de Usuarios',
+                'calendario': 'Calendario de Proyectos',
+                'finanzas': 'Gestión Financiera',
+                'reportes': 'Reportes y Analytics',
+                'configuracion': 'Configuración del Sistema'
+            };
+            
+            document.querySelector('.page-title').textContent = titles[section] || 'Dashboard';
+        }
+
+        // Counter animation for stats
+        function animateCounter(element) {
+            const target = parseInt(element.dataset.target);
+            const duration = 2000;
+            const increment = target / (duration / 16);
+            let current = 0;
+            
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    element.textContent = target;
+                    clearInterval(timer);
+                } else {
+                    element.textContent = Math.floor(current);
+                }
+            }, 16);
+        }
+
+        // Progress bar animation
+        function animateProgressBars() {
+            document.querySelectorAll('[data-width]').forEach(bar => {
+                const width = bar.dataset.width;
+                setTimeout(() => {
+                    bar.style.width = width + '%';
+                }, 500);
+            });
+        }
+
+        // Modal functions
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'block';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        // CRUD Functions
+        function editProject(id) {
+            alert(`Editando proyecto ID: ${id}`);
+            // Here you would typically open an edit modal with the project data
+        }
+
+        function deleteProject(id) {
+            if (confirm('¿Estás seguro de que quieres eliminar este proyecto?')) {
+                alert(`Proyecto ID: ${id} eliminado`);
+                // Here you would typically make an API call to delete the project
+            }
+        }
+
+        function editUser(id) {
+            alert(`Editando usuario ID: ${id}`);
+            // Here you would typically open an edit modal with the user data
+        }
+
+        function deleteUser(id) {
+            if (confirm('¿Estás seguro de que quieres eliminar este usuario?')) {
+                alert(`Usuario ID: ${id} eliminado`);
+                // Here you would typically make an API call to delete the user
+            }
+        }
+
+        function logout() {
+            if (confirm('¿Estás seguro de que quieres salir del sistema?')) {
+                alert('Cerrando sesión...');
+                // Here you would typically redirect to login page
+                // window.location.href = '/login';
+            }
+        }
+
+        function showSection(section) {
+            // Remove active from all nav links
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            
+            // Add active to the corresponding nav link
+            const navLink = document.querySelector(`[data-section="${section}"]`);
+            if (navLink) {
+                navLink.classList.add('active');
+                updatePageTitle(section);
+            }
+        }
+
+        // Form submissions
+        document.getElementById('projectForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Show loading state
+            const submitBtn = this.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<div class="loading"></div> Creando...';
+            submitBtn.disabled = true;
+            
+            // Simulate API call
+            setTimeout(() => {
+                alert('Proyecto creado exitosamente');
+                closeModal('projectModal');
+                this.reset();
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }, 1500);
+        });
+
+        document.getElementById('userForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Show loading state
+            const submitBtn = this.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<div class="loading"></div> Creando...';
+            submitBtn.disabled = true;
+            
+            // Simulate API call
+            setTimeout(() => {
+                alert('Usuario creado exitosamente');
+                closeModal('userModal');
+                this.reset();
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }, 1500);
+        });
+
+        // Initialize animations on page load
+        window.addEventListener('load', function() {
+            // Animate stat counters
+            document.querySelectorAll('.stat-value[data-target]').forEach(animateCounter);
+            
+            // Animate progress bars
+            animateProgressBars();
+            
+            // Add fade-in effect to elements
+            document.querySelectorAll('.fade-in, .slide-in').forEach(element => {
+                element.style.opacity = '0';
+                element.style.transform = element.classList.contains('fade-in') ? 'translateY(20px)' : 'translateX(-20px)';
+                
+                setTimeout(() => {
+                    element.style.transition = 'all 0.6s ease-out';
+                    element.style.opacity = '1';
+                    element.style.transform = 'translate(0)';
+                }, 100);
+            });
+        });
+
+        // Real-time updates simulation
+        function updateRealTimeData() {
+            // Simulate real-time data updates
+            const stats = document.querySelectorAll('.stat-value');
+            stats.forEach(stat => {
+                if (Math.random() > 0.95) { // 5% chance of update
+                    const current = parseInt(stat.textContent);
+                    const change = Math.floor(Math.random() * 3) - 1; // -1, 0, or 1
+                    if (current + change > 0) {
+                        stat.textContent = current + change;
+                    }
+                }
+            });
+        }
+
+        // Update real-time data every 30 seconds
+        setInterval(updateRealTimeData, 30000);
+
+        // Close modals when clicking outside
+        window.addEventListener('click', function(e) {
+            if (e.target.classList.contains('modal')) {
+                e.target.style.display = 'none';
+            }
+        });
+
+        // Responsive table handling
+        function handleResponsiveTables() {
+            const tables = document.querySelectorAll('.table-card');
+            tables.forEach(table => {
+                if (table.scrollWidth > table.clientWidth) {
+                    table.style.overflowX = 'auto';
+                }
+            });
+        }
+
+        window.addEventListener('resize', handleResponsiveTables);
+        window.addEventListener('load', handleResponsiveTables);
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            // Ctrl/Cmd + N for new project
+            if ((e.ctrlKey || e.metaKey) && e.key === 'n') {
+                e.preventDefault();
+                openModal('projectModal');
+            }
+            
+            // Escape to close modals
+            if (e.key === 'Escape') {
+                document.querySelectorAll('.modal').forEach(modal => {
+                    modal.style.display = 'none';
+                });
+            }
+        });
+
+        // Auto-save functionality simulation
+        let autoSaveTimer;
+        function scheduleAutoSave() {
+            clearTimeout(autoSaveTimer);
+            autoSaveTimer = setTimeout(() => {
+                console.log('Auto-saving dashboard state...');
+                // Here you would save the current state to localStorage or API
+            }, 2000);
+        }
+
+        // Trigger auto-save on any form input
+        document.addEventListener('input', scheduleAutoSave);
+
+        console.log('ProBuild Dashboard loaded successfully! 🏗️');
+    </script>
+</body>
+</html> style="font-weight: 600;">Torre Empresarial Norte</div>
+                                <div style="color: #6c757d; font-size: 0.9rem;">TEN-2024-001</div>
+                            </td>
+                            <td>Constructora Moderna S.A.</td>
+                            <td>
+                                <div class="project-progress">
+                                    <div class="progress-bar-small">
+                                        <div class="progress-fill-small" style="width: 75%;"></div>
+                                    </div>
+                                    <span>75%</span>
+                                </div>
+                            </td>
+                            <td><span class="status-badge status-active">En Progreso</span></td>
+                            <td>15 Nov 2024</td>
+                            <td>$850,000</td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button class="btn-small btn-edit" onclick="editProject(1)">✏️</button>
+                                    <button class="btn-small btn-delete" onclick="deleteProject(1)">🗑️</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div style="font-weight: 600;">Residencial Los Pinos</div>
+                                <div style="color: #6c757d; font-size: 0.9rem;">RLP-2024-002</div>
+                            </td>
+                            <td>Inmobiliaria Central</td>
+                            <td>
+                                <div class="project-progress">
+                                    <div class="progress-bar-small">
+                                        <div class="progress-fill-small" style="width: 45%;"></div>
+                                    </div>
+                                    <span>45%</span>
+                                </div>
+                            </td>
+                            <td><span class="status-badge status-pending">Pendiente</span></td>
+                            <td>28 Dic 2024</td>
+                            <td>$1,200,000</td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button class="btn-small btn-edit" onclick="editProject(2)">✏️</button>
+                                    <button class="btn-small btn-delete" onclick="deleteProject(2)">🗑️</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div style="font-weight: 600;">Centro Comercial Plaza</div>
+                                <div style="color: #6c757d; font-size: 0.9rem;">CCP-2024-003</div>
+                            </td>
+                            <td>Desarrollos Urbanos</td>
+                            <td>
+                                <div class="project-progress">
+                                    <div class="progress-bar-small">
+                                        <div class="progress-fill-small" style="width: 100%;"></div>
+                                    </div>
+                                    <span>100%</span>
+                                </div>
+                            </td>
+                            <td><span class="status-badge status-completed">Completado</span></td>
+                            <td>30 Sep 2024</td>
+                            <td>$2,150,000</td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button class="btn-small btn-edit" onclick="editProject(3)">✏️</button>
+                                    <button class="btn-small btn-delete" onclick="deleteProject(3)">🗑️</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div style="font-weight: 600;">Complejo Habitacional Sur</div>
+                                <div style="color: #6c757d; font-size: 0.9rem;">CHS-2024-004</div>
+                            </td>
+                            <td>Vivienda Social Corp.</td>
+                            <td>
+                                <div
