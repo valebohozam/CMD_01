@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ProBuild · Recuperación de Contraseña</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    :root{
+      --primary-color:#ff6b35; --secondary-color:#1a1a2e; --accent-color:#0f4c75;
+      --text-light:#ffffff; --text-dark:#2c3e50; --background-light:#f8f9fa;
+      --gradient-primary:linear-gradient(135deg,#ff6b35 0%,#ff8c42 100%);
+      --gradient-secondary:linear-gradient(135deg,#1a1a2e 0%,#16213e 100%);
+      --shadow-primary:0 20px 60px rgba(255,107,53,.3); --shadow-secondary:0 10px 30px rgba(0,0,0,.2);
+      --error-color:#e74c3c; --success-color:#27ae60;
+    }
+    body{font-family:'Inter',sans-serif; color:var(--text-dark); overflow-x:hidden;}
+
+    /* Navbar */
+    .navbar{ position:fixed; top:0; width:100%; padding:1rem 0; background:rgba(26,26,46,.95); backdrop-filter: blur(20px); border-bottom:1px solid rgba(255,255,255,.1); z-index:1000; }
+    .nav-container{ max-width:1200px; margin:0 auto; display:flex; justify-content:space-between; align-items:center; padding:0 2rem; }
+    .logo{ font-size:1.8rem; font-weight:800; color:var(--text-light); text-decoration:none; background:var(--gradient-primary); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+    .nav-links{ display:flex; list-style:none; gap:2rem; }
+    .nav-links a{ color:var(--text-light); text-decoration:none; font-weight:500; position:relative; }
+    .nav-links a::after{ content:''; position:absolute; bottom:-5px; left:0; width:0; height:2px; background:var(--gradient-primary); transition:width .3s ease; }
+    .nav-links a:hover::after{ width:100%; }
+    .login-link{ background:transparent; color:var(--text-light); padding:.5rem 1rem; border:1px solid rgba(255,255,255,.3); border-radius:25px; text-decoration:none; font-weight:500; transition:.3s; }
+    .login-link:hover{ background:rgba(255,255,255,.1); }
+
+    /* Page */
+    .recover-page{ position:relative; min-height:100vh; background:var(--gradient-secondary); display:flex; align-items:center; justify-content:center; padding:2rem; overflow:hidden; }
+    .recover-page::before{ content:''; position:absolute; inset:0; background:url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><defs><pattern id=%22grid%22 width=%2210%22 height=%2210%22 patternUnits=%22userSpaceOnUse%22><path d=%22M 10 0 L 0 0 0 10%22 fill=%22none%22 stroke=%22rgba(255,255,255,0.03)%22 stroke-width=%221%22/></pattern></defs><rect width=%22100%22 height=%22100%22 fill=%22url(%23grid)%22/></svg>'); animation:gridMove 20s linear infinite; }
+    @keyframes gridMove{ 0%{transform:translate(0,0)} 100%{transform:translate(10px,10px)} }
+    .floating{ position:absolute; background:rgba(255,107,53,.1); border-radius:50%; animation:float 6s ease-in-out infinite; }
+    .floating.f1{ width:100px; height:100px; top:15%; left:10%; animation-delay:0s; }
+    .floating.f2{ width:60px; height:60px; top:70%; right:15%; animation-delay:2s; }
+    .floating.f3{ width:80px; height:80px; bottom:20%; left:80%; animation-delay:4s; }
+    @keyframes float{ 0%,100%{ transform:translateY(0) rotate(0) } 50%{ transform:translateY(-20px) rotate(180deg) } }
+
+    /* Container */
+    .recover-container{ background:rgba(255,255,255,.1); backdrop-filter: blur(20px); border-radius:20px; padding:2rem; border:1px solid rgba(255,255,255,.2); max-width:520px; width:100%; position:relative; z-index:2; box-shadow:var(--shadow-secondary); animation: slideInUp 1s ease-out; }
+    .header{ text-align:center; margin-bottom:1.2rem; }
+    .header h1{ font-size:2rem; font-weight:800; color:var(--text-light); }
+    .header p{ color:rgba(255,255,255,.75) }
+
+    /* Stepper */
+    .stepper{ display:flex; justify-content:space-between; gap:.5rem; margin:1rem 0 1.4rem; }
+    .step{ flex:1; display:flex; align-items:center; gap:.6rem; color:rgba(255,255,255,.7); }
+    .dot{ width:28px; height:28px; border-radius:50%; background:rgba(255,255,255,.15); border:1px solid rgba(255,255,255,.25); color:#fff; display:grid; place-items:center; font-weight:800; }
+    .step.active .dot{ background:var(--primary-color); border-color:transparent; }
+    .step .label{ font-size:.9rem; font-weight:700; }
+
+    /* Forms */
+    .form{ display:flex; flex-direction:column; gap:1rem; }
+    .group{ display:flex; flex-direction:column; gap:.45rem; }
+    label{ color:rgba(255,255,255,.9); font-weight:600; font-size:.92rem; }
+    .input, select{ width:100%; padding:1rem; background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.25); border-radius:12px; color:#fff; font-size:1rem; transition:.2s; }
+    .input::placeholder{ color:rgba(255,255,255,.55); }
+    .input:focus{ outline:none; border-color:var(--primary-color); box-shadow:0 0 0 3px rgba(255,107,53,.22); background:rgba(255,255,255,.15); }
+    .btn{ border:none; border-radius:12px; padding:1rem 1.2rem; font-weight:800; cursor:pointer; }
+    .btn-primary{ background:var(--gradient-primary); color:#fff; box-shadow: var(--shadow-primary); }
+    .btn-primary:hover{ transform: translateY(-1px); box-shadow: 0 25px 70px rgba(255,107,53,.4); }
+    .btn-ghost{ background:transparent; color:#fff; border:1px solid rgba(255,255,255,.25); }
+    .btn-inline{ padding:.6rem .9rem; font-size:.9rem; }
+
+    .muted{ color:rgba(255,255,255,.75); font-size:.9rem; }
+
+    /* OTP */
+    .otp{ display:flex; gap:.6rem; justify-content:center; }
+    .otp input{ width:42px; height:52px; text-align:center; font-size:1.2rem; background:rgba(255,255,255,.1); color:#fff; border:1px solid rgba(255,255,255,.25); border-radius:10px; }
+    .otp input:focus{ outline:none; border-color:var(--primary-color); box-shadow:0 0 0 3px rgba(255,107,53,.22); background:rgba(255,255,255,.15); }
+
+    /* Password strength */
+    .strength{ margin-top:.35rem; padding:.5rem; border-radius:8px; font-size:.82rem; text-align:center; display:none; }
+    .weak{ background:rgba(231,76,60,.2); color:#ff6b6b; border:1px solid rgba(231,76,60,.3); }
+    .medium{ background:rgba(241,196,15,.2); color:#f1c40f; border:1px solid rgba(241,196,15,.3); }
+    .strong{ background:rgba(39,174,96,.2); color:#2ecc71; border:1px solid rgba(39,174,96,.3); }
+
+    /* Alerts */
+    #alerts{ margin:.6rem 0; }
+    .alert{ padding: .9rem 1rem; border-radius:12px; margin-bottom:.6rem; font-size:.92rem; animation: slideInDown .25s ease-out; }
+    .alert.error{ background:rgba(231,76,60,.2); color:#ff6b6b; border:1px solid rgba(231,76,60,.3); }
+    .alert.success{ background:rgba(39,174,96,.2); color:#2ecc71; border:1px solid rgba(39,174,96,.3); }
+
+    /* Loading */
+    .loading{ display:inline-block; width:18px; height:18px; border:2px solid #f3f3f3; border-top:2px solid var(--primary-color); border-radius:50%; animation:spin 1s linear infinite; vertical-align:-3px; margin-right:.5rem; }
+    @keyframes spin{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}
+
+    /* Success view */
+    .success-view{ text-align:center; color:#fff; }
+    .check{ width:68px; height:68px; border-radius:50%; display:grid; place-items:center; background:rgba(39,174,96,.18); border:2px solid rgba(39,174,96,.35); margin:0 auto 1rem; font-size:2rem; }
+
+    /* Animations */
+    @keyframes slideInUp{ from{opacity:0; transform:translateY(50px)} to{opacity:1; transform:translateY(0)} }
+    @keyframes slideInDown{ from{opacity:0; transform:translateY(-16px)} to{opacity:1; transform:translateY(0)} }
+
+    /* Responsive */
+    @media (max-width:768px){ .nav-links{display:none} .recover-container{ padding:1.6rem } .header h1{ font-size:1.7rem } .otp input{ width:40px; height:50px } }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="logo">ProBuild</a>
+      <ul class="nav-links">
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="funciones.html">Funciones</a></li>
+        <li><a href="proyectos.html">Proyectos</a></li>
+        <li><a href="contacto.html">Contacto</a></li>
+      </ul>
+      <a href="login.html" class="login-link">Iniciar Sesión</a>
+    </div>
+  </nav>
+
+  <!-- Page -->
+  <section class="recover-page" style="padding-top:6rem">
+    <i class="floating f1"></i>
+    <i class="floating f2"></i>
+    <i class="floating f3"></i>
+
+    <div class="recover-container">
+      <header class="header">
+        <h1>Recupera tu contraseña</h1>
+        <p>Ingresa tu correo, verifica el código y restablece tu contraseña.</p>
+      </header>
+
+      <!-- Stepper -->
+      <div class="stepper" aria-label="Progreso del proceso">
+        <div class="step active" id="s1"><span class="dot">1</span><span class="label">Tu correo</span></div>
+        <div class="step" id="s2"><span class="dot">2</span><span class="label">Código</span></div>
+        <div class="step" id="s3"><span class="dot">3</span><span class="label">Nueva clave</span></div>
+      </div>
+
+      <!-- Alerts -->
+      <div id="alerts" aria-live="polite"></div>
+
+      <!-- STEP 1: Request code -->
+      <form id="formRequest" class="form" autocomplete="off">
+        <div class="group">
+          <label for="email">Correo electrónico</label>
+          <input class="input" type="email" id="email" name="email" placeholder="tu@email.com" required />
+          <small class="muted">Te enviaremos un código de verificación de 6 dígitos.</small>
+        </div>
+        <button class="btn btn-primary" type="submit"><span id="reqSpin" style="display:none" class="loading"></span>Enviar código</button>
+      </form>
+
+      <!-- STEP 2: Verify code -->
+      <form id="formVerify" class="form" style="display:none" autocomplete="off">
+        <div class="group" style="text-align:center">
+          <label>Ingresa el código enviado a <b id="emailDisplay"></b></label>
+        </div>
+        <div class="otp" id="otpBox" aria-label="Código de verificación de seis dígitos">
+          <input inputmode="numeric" pattern="[0-9]*" maxlength="1" />
+          <input inputmode="numeric" pattern="[0-9]*" maxlength="1" />
+          <input inputmode="numeric" pattern="[0-9]*" maxlength="1" />
+          <input inputmode="numeric" pattern="[0-9]*" maxlength="1" />
+          <input inputmode="numeric" pattern="[0-9]*" maxlength="1" />
+          <input inputmode="numeric" pattern="[0-9]*" maxlength="1" />
+        </div>
+        <div style="display:flex; justify-content:space-between; align-items:center">
+          <button class="btn btn-ghost btn-inline" type="button" id="changeEmail">Cambiar correo</button>
+          <button class="btn btn-ghost btn-inline" type="button" id="resend" disabled>Reenviar código (60s)</button>
+        </div>
+        <button class="btn btn-primary" type="submit"><span id="verSpin" style="display:none" class="loading"></span>Verificar código</button>
+      </form>
+
+      <!-- STEP 3: Reset password -->
+      <form id="formReset" class="form" style="display:none" autocomplete="off">
+        <div class="group">
+          <label for="password">Nueva contraseña</label>
+          <div style="position:relative">
+            <input class="input" type="password" id="password" name="password" placeholder="Crea una contraseña segura" required />
+            <button type="button" class="btn btn-ghost btn-inline" id="togglePass" style="position:absolute; right:.5rem; top:.5rem">👁️</button>
+          </div>
+          <div class="strength" id="strength"></div>
+        </div>
+        <div class="group">
+          <label for="confirm">Confirmar contraseña</label>
+          <div style="position:relative">
+            <input class="input" type="password" id="confirm" name="confirm" placeholder="Repítela" required />
+            <button type="button" class="btn btn-ghost btn-inline" id="toggleConf" style="position:absolute; right:.5rem; top:.5rem">👁️</button>
+          </div>
+        </div>
+        <small class="muted">No reutilices contraseñas de otros servicios. Usa al menos 8 caracteres, mayúsculas, minúsculas, números y símbolos.</small>
+        <button class="btn btn-primary" type="submit"><span id="resSpin" style="display:none" class="loading"></span>Restablecer contraseña</button>
+      </form>
+
+      <!-- STEP 4: Success -->
+      <div id="viewSuccess" class="success-view" style="display:none">
+        <div class="check">✔</div>
+        <h2>¡Tu contraseña fue restablecida!</h2>
+        <p class="muted">Ahora puedes iniciar sesión con tu nueva contraseña.</p>
+        <div style="margin-top:1rem"><a class="btn btn-primary" href="login.html">Ir a Iniciar Sesión</a></div>
+      </div>
+
+      <div style="margin-top:1rem; text-align:center">
+        <a class="btn btn-ghost btn-inline" href="login.html">Volver al inicio de sesión</a>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    // ===== Utilities =====
+    const qs = (s, el=document)=> el.querySelector(s);
+    const qsa = (s, el=document)=> [...el.querySelectorAll(s)];
+    function showAlert(msg, type='error'){ const wrap=qs('#alerts'); wrap.innerHTML = `<div class="alert ${type==='success'?'success':'error'}">${msg}</div>`; }
+    function clearAlert(){ qs('#alerts').innerHTML=''; }
+
+    // Password strength
+    function checkStrength(p){
+      const min = p.length>=8, up=/[A-Z]/.test(p), lo=/[a-z]/.test(p), num=/\d/.test(p), sp=/[!@#$%^&*(),.?":{}|<>]/.test(p);
+      const score = [min,up,lo,num,sp].filter(Boolean).length;
+      if(score<3) return {cls:'weak', text:'Contraseña débil – agrega mayúsculas, números y símbolos'};
+      if(score<5) return {cls:'medium', text:'Contraseña media – añade más variedad o longitud'};
+      return {cls:'strong', text:'Contraseña fuerte'};
+    }
+
+    // Stepper
+    function setStep(n){ ['s1','s2','s3'].forEach((id,i)=>{ const el=qs('#'+id); if(el){ el.classList.toggle('active', i<=n-1); } }); }
+
+    // Mock backend state (reemplazar por API)
+    let currentOtp = null; // string
+    let otpExpiresAt = 0;  // timestamp
+    let emailValue = '';
+
+    // ===== STEP 1: request code =====
+    qs('#formRequest').addEventListener('submit', (e)=>{
+      e.preventDefault();
+      const email = qs('#email').value.trim();
+      // Validación básica de email
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if(!emailRegex.test(email)){ showAlert('Ingresa un correo válido.'); return; }
+
+      // UI loading
+      qs('#reqSpin').style.display='inline-block';
+      const btn = e.submitter || qs('#formRequest button[type="submit"]'); btn.disabled=true;
+
+      // Simulación de API: POST /auth/forgot-password { email }
+      setTimeout(()=>{
+        clearAlert();
+        // Generar OTP de 6 dígitos
+        currentOtp = (''+Math.floor(100000 + Math.random()*900000));
+        otpExpiresAt = Date.now() + 10*60*1000; // 10 minutos
+        emailValue = email;
+        // Aviso
+        showAlert('Hemos enviado un código a '+email.replace(/(.{2}).+(@.+)/,'$1***$2')+'.', 'success');
+        // Paso siguiente
+        qs('#formRequest').style.display='none';
+        qs('#formVerify').style.display='flex';
+        qs('#emailDisplay').textContent = email;
+        setStep(2);
+        startResendCountdown();
+        focusOtpFirst();
+        // (Para pruebas) descomenta para ver el código en consola
+        console.log('[OTP demo]', currentOtp);
+
+        qs('#reqSpin').style.display='none'; btn.disabled=false;
+      }, 1000);
+    });
+
+    function focusOtpFirst(){ const first = qs('#otpBox input'); if(first) first.focus(); }
+
+    // OTP inputs comportamiento
+    qsa('#otpBox input').forEach((inp, idx, arr)=>{
+      inp.addEventListener('input', ()=>{ inp.value = inp.value.replace(/\D/g,'').slice(0,1); if(inp.value && arr[idx+1]) arr[idx+1].focus(); });
+      inp.addEventListener('keydown', (e)=>{ if(e.key==='Backspace' && !inp.value && arr[idx-1]) arr[idx-1].focus(); });
+      inp.addEventListener('paste', (e)=>{ const data=(e.clipboardData || window.clipboardData).getData('text'); if(!data) return; e.preventDefault(); const digits=data.replace(/\D/g,'').slice(0,6).split(''); arr.forEach((el,i)=> el.value = digits[i]||''); if(digits.length===6) qs('#formVerify').requestSubmit(); });
+    });
+
+    // Cambiar correo
+    qs('#changeEmail').addEventListener('click', ()=>{ qs('#formVerify').style.display='none'; qs('#formRequest').style.display='flex'; setStep(1); clearAlert(); });
+
+    // Resend
+    let resendTimer = null, remaining = 60;
+    function startResendCountdown(){
+      remaining = 60;
+      const btn = qs('#resend');
+      btn.disabled = true; btn.textContent = `Reenviar código (${remaining}s)`;
+      clearInterval(resendTimer);
+      resendTimer = setInterval(()=>{
+        remaining--; btn.textContent = `Reenviar código (${remaining}s)`;
+        if(remaining<=0){ clearInterval(resendTimer); btn.disabled=false; btn.textContent='Reenviar código'; }
+      }, 1000);
+    }
+    qs('#resend').addEventListener('click', ()=>{
+      if(remaining>0) return; // protegido
+      // Simulación de API: reenviar OTP
+      currentOtp = (''+Math.floor(100000 + Math.random()*900000));
+      otpExpiresAt = Date.now() + 10*60*1000;
+      showAlert('Nuevo código enviado a '+emailValue.replace(/(.{2}).+(@.+)/,'$1***$2')+'.','success');
+      console.log('[OTP demo - resend]', currentOtp);
+      startResendCountdown();
+    });
+
+    // Verificar código
+    qs('#formVerify').addEventListener('submit', (e)=>{
+      e.preventDefault();
+      const btn = e.submitter || qs('#formVerify button[type="submit"]'); btn.disabled=true; qs('#verSpin').style.display='inline-block';
+      const code = qsa('#otpBox input').map(i=>i.value).join('');
+      setTimeout(()=>{
+        if(code.length!==6){ showAlert('Completa los 6 dígitos del código.'); btn.disabled=false; qs('#verSpin').style.display='none'; return; }
+        if(Date.now()>otpExpiresAt){ showAlert('El código ha expirado. Solicita uno nuevo.'); btn.disabled=false; qs('#verSpin').style.display='none'; return; }
+        if(code!==currentOtp){ showAlert('El código ingresado no es válido.'); btn.disabled=false; qs('#verSpin').style.display='none'; return; }
+        // OK -> siguiente paso
+        clearAlert();
+        qs('#formVerify').style.display='none';
+        qs('#formReset').style.display='flex';
+        setStep(3);
+        qs('#password').focus();
+        btn.disabled=false; qs('#verSpin').style.display='none';
+      }, 700);
+    });
+
+    // ===== STEP 3: reset password =====
+    const pass = qs('#password'), conf = qs('#confirm'), st = qs('#strength');
+    pass.addEventListener('input', ()=>{
+      const val = pass.value; if(!val){ st.style.display='none'; return; }
+      const s = checkStrength(val); st.style.display='block'; st.className = `strength ${s.cls}`; st.textContent = s.text; clearAlert();
+    });
+
+    // Mostrar/ocultar contraseña
+    qs('#togglePass').addEventListener('click', ()=>{ pass.type = pass.type==='password'?'text':'password'; });
+    qs('#toggleConf').addEventListener('click', ()=>{ conf.type = conf.type==='password'?'text':'password'; });
+
+    qs('#formReset').addEventListener('submit', (e)=>{
+      e.preventDefault();
+      const btn = e.submitter || qs('#formReset button[type="submit"]'); btn.disabled=true; qs('#resSpin').style.display='inline-block';
+      const p = pass.value.trim(), c = conf.value.trim();
+      const ch = checkStrength(p);
+      setTimeout(()=>{
+        if(p!==c){ showAlert('Las contraseñas no coinciden.'); btn.disabled=false; qs('#resSpin').style.display='none'; return; }
+        if(ch.cls==='weak'){ showAlert('La contraseña es muy débil. Usa una más segura.'); btn.disabled=false; qs('#resSpin').style.display='none'; return; }
+        // Simulación API: POST /auth/reset-password { email, code/token, password }
+        clearAlert();
+        qs('#formReset').style.display='none';
+        qs('#viewSuccess').style.display='block';
+        // limpiar otp
+        currentOtp = null; otpExpiresAt = 0;
+        btn.disabled=false; qs('#resSpin').style.display='none';
+      }, 900);
+    });
+  </script>
+</body>
+</html>
