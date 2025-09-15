@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ProBuild - Proyectos</title>
+
+    <!-- Conexión a Google Fonts para usar la tipografía "Inter" -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Enlace al archivo de estilos CSS -->
+    <link rel="stylesheet" href="../css/proyectos.css">
+</head>
+<body>
+    <!-- Barra de navegación principal -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <!-- Logo que lleva a la página de inicio -->
+            <a href="./landing.html" class="logo">ProBuild</a>
+
+            <!-- Menú de enlaces de navegación -->
+            <ul class="nav-links">
+                <li><a href="./landing.html">Inicio</a></li>
+                <li><a href="./funciones.html">Funciones</a></li>
+                <li><a href="#" class="active">Proyectos</a></li>
+                <li><a href="./contacto.html">Contacto</a></li>
+            </ul>
+
+            <!-- Botón de inicio de sesión -->
+            <a href="probuild-login.html" class="cta-button">Iniciar Sesión</a>
+        </div>
+    </nav>
+
+    <!-- Sección principal (Hero) de la página -->
+    <section class="page-hero">
+        <div class="page-hero-content">
+            <h1>Nuestros <span class="highlight">Proyectos</span></h1>
+            <p>Descubre los proyectos de construcción que hemos gestionado exitosamente con ProBuild. Cada uno representa nuestra dedicación a la excelencia.</p>
+        </div>
+    </section>
+
+    <!-- Sección de filtros para buscar proyectos -->
+    <section class="filter-section">
+        <div class="filter-container">
+            
+            <!-- Filtro por estado del proyecto -->
+            <div class="filter-group">
+                <label>Estado:</label>
+                <select class="filter-select" id="statusFilter">
+                    <option value="">Todos</option>
+                    <option value="active">En Progreso</option>
+                    <option value="planning">Planificación</option>
+                    <option value="completed">Completado</option>
+                </select>
+            </div>
+
+            <!-- Filtro por tipo de proyecto -->
+            <div class="filter-group">
+                <label>Tipo:</label>
+                <select class="filter-select" id="typeFilter">
+                    <option value="">Todos</option>
+                    <option value="residential">Residencial</option>
+                    <option value="commercial">Comercial</option>
+                    <option value="industrial">Industrial</option>
+                </select>
+            </div>
+
+            <!-- Barra de búsqueda por nombre o palabra clave -->
+            <input type="text" class="search-box" placeholder="Buscar proyectos..." id="searchBox">
+        </div>
+    </section>
+
+    <!-- Sección donde se muestran los proyectos -->
+    <section class="projects-section">
+        <div class="projects-container">
+            
+            <!-- Aquí se insertan dinámicamente las tarjetas de proyectos con JavaScript -->
+            <div class="projects-grid" id="projectsGrid">
+                <!-- Project Cards will be inserted here by JavaScript -->
+            </div>
+
+            <!-- Mensaje cuando no se encuentran proyectos -->
+            <div class="empty-state" id="emptyState" style="display: none;">
+                <h3>No se encontraron proyectos</h3>
+                <p>Intenta ajustar los filtros de búsqueda para encontrar más proyectos.</p>
+                <!-- Botón para reiniciar filtros -->
+                <a href="#" class="btn-primary" onclick="clearFilters()">Limpiar Filtros</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Archivo JavaScript encargado de manejar la lógica de proyectos -->
+    <script src="../js/proyectos.js"></script>
+</body>
+</html>

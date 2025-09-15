@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <!-- Configuración de la codificación de caracteres -->
+    <meta charset="UTF-8">
+    <!-- Ajuste para que sea responsive en móviles -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Título que aparece en la pestaña del navegador -->
+    <title>ProBuild - Funciones</title>
+
+    <!-- Conexión previa a Google Fonts para optimizar carga -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <!-- Importación de la fuente "Inter" en distintos grosores -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Hoja de estilos principal de esta página -->
+    <link rel="stylesheet" href="../css/funciones.css">
+</head>
+<body>
+    <!-- ================= NAVBAR ================= -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <!-- Logo que redirige al landing -->
+            <a href="./landing.html" class="logo">ProBuild</a>
+
+            <!-- Lista de enlaces de navegación -->
+            <ul class="nav-links">
+                <li><a href="./landing.html">Inicio</a></li>
+                <!-- La sección actual se marca como activa -->
+                <li><a href="#" class="active">Funciones</a></li>
+                <li><a href="./proyectos.html">Proyectos</a></li>
+                <li><a href="./contacto.html">Contacto</a></li>
+            </ul>
+
+            <!-- Botón de acceso/login -->
+            <a href="./login.html" class="cta-button">Iniciar Sesión</a>
+        </div>
+    </nav>
+
+    <!-- ================= HERO DE LA PÁGINA ================= -->
+    <section class="page-hero">
+        <div class="page-hero-content">
+            <!-- Título principal con parte resaltada -->
+            <h1>Funciones <span class="highlight">Avanzadas</span></h1>
+            <!-- Descripción introductoria -->
+            <p>Descubre todas las herramientas que ProBuild pone a tu disposición para gestionar proyectos de construcción de manera eficiente y profesional.</p>
+        </div>
+    </section>
+
+    <!-- ================= SECCIÓN DE FUNCIONES ================= -->
+    <section class="features-detail">
+        <div class="features-detail-container">
+
+            <!-- ********** FUNCIÓN 1: Dashboard Intuitivo ********** -->
+            <div class="feature-detail fade-in">
+                <!-- Texto descriptivo de la función -->
+                <div class="feature-content">
+                    <h2>Dashboard Intuitivo</h2>
+                    <p>Obtén una vista completa de todos tus proyectos en un solo lugar...</p>
+                    <!-- Lista de ventajas -->
+                    <ul class="feature-list">
+                        <li>Visualización en tiempo real del progreso</li>
+                        <li>Métricas clave y KPIs importantes</li>
+                        <li>Alertas automáticas de problemas</li>
+                        <li>Gráficos interactivos y personalizables</li>
+                        <li>Vista consolidada de múltiples proyectos</li>
+                    </ul>
+                </div>
+
+                <!-- Parte visual (mockup) de esta función -->
+                <div class="feature-visual">
+                    <div class="feature-mockup">
+                        <!-- Simulación de ventana con "puntos" estilo navegador -->
+                        <div class="mockup-header">
+                            <div class="mockup-dot"></div>
+                            <div class="mockup-dot"></div>
+                            <div class="mockup-dot"></div>
+                        </div>
+                        <!-- Contenido gráfico simulado -->
+                        <div class="mockup-content">
+                            <div style="margin-bottom: 1rem; font-weight: 600;">Resumen de Proyectos</div>
+                            <!-- Barra de progreso del proyecto 1 -->
+                            <div style="margin-bottom: 0.5rem; font-size: 0.9rem;">Torre Central - 75% completado</div>
+                            <div class="progress-bar"><div class="progress-fill" style="width: 75%;"></div></div>
+                            <!-- Barra de progreso del proyecto 2 -->
+                            <div style="margin-bottom: 0.5rem; font-size: 0.9rem;">Residencial Los Pinos - 45% completado</div>
+                            <div class="progress-bar"><div class="progress-fill" style="width: 45%;"></div></div>
+                            <!-- Barras estilo gráfico -->
+                            <div class="chart-bars">
+                                <div class="chart-bar"></div>
+                                <div class="chart-bar"></div>
+                                <div class="chart-bar"></div>
+                                <div class="chart-bar"></div>
+                                <div class="chart-bar"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ********** FUNCIÓN 2: Gestión de Equipos ********** -->
+            <div class="feature-detail fade-in">
+                <div class="feature-content">
+                    <h2>Gestión de Equipos</h2>
+                    <p>Coordina a todo tu equipo de trabajo con herramientas avanzadas de colaboración...</p>
+                    <ul class="feature-list">
+                        <li>Perfiles detallados de cada miembro</li>
+                        <li>Asignación automática de tareas</li>
+                        <li>Control de accesos y permisos</li>
+                        <li>Comunicación en tiempo real</li>
+                        <li>Seguimiento de productividad</li>
+                    </ul>
+                </div>
+
+                <!-- Mockup del equipo -->
+                <div class="feature-visual">
+                    <div class="feature-mockup">
+                        <div class="mockup-header">
+                            <div class="mockup-dot"></div>
+                            <div class="mockup-dot"></div>
+                            <div class="mockup-dot"></div>
+                        </div>
+                        <div class="mockup-content">
+                            <!-- Título de la simulación -->
+                            <div style="margin-bottom: 1rem; font-weight: 600;">Equipo de Trabajo</div>
+
+                            <!-- Avatares de miembros del equipo -->
+                            <div class="team-avatars">
+                                <div class="avatar">JM</div>
+                                <div class="avatar">AS</div>
+                                <div class="avatar">CR</div>
+                                <div class="avatar">ML</div>
+                                <div class="avatar">+5</div>
+                            </div>
+
+                            <!-- Lista con estados de conexión -->
+                            <div style="margin: 1rem 0; font-size: 0.9rem;">
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                    <span>Juan Martínez - Arquitecto</span>
+                                    <span style="color: #4CAF50;">En línea</span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                    <span>Ana Silva - Ingeniera</span>
+                                    <span style="color: #FF9800;">Ocupado</span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between;">
+                                    <span>Carlos Ruiz - Supervisor</span>
+                                    <span style="color: #4CAF50;">En línea</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ********** FUNCIÓN 3: Planificación Avanzada ********** -->
+            <div class="feature-detail fade-in">
+                <div class="feature-content">
+                    <h2>Planificación Avanzada</h2>
+                    <p>Crea cronogramas detallados con todas las fases de tu proyecto...</p>
+                    <ul class="feature-list">
+                        <li>Cronogramas de Gantt interactivos</li>
+                        <li>Gestión de dependencias entre tareas</li>
+                        <li>Asignación optimizada de recursos</li>
+                        <li>Identificación de ruta crítica</li>
+                        <li>Escenarios de planificación múltiples</li>
+                    </ul>
+                </div>
+
+                <!-- Mockup de planificación -->
+                <div class="feature-visual">
+                    <div class="feature-mockup">
+                        <div class="mockup-header">
+                            <div class="mockup-dot"></div>
+                            <div class="mockup-dot"></div>
+                            <div class="mockup-dot"></div>
+                        </div>
+                        <div class="mockup-content">
+                            <div style="margin-bottom: 1rem; font-weight: 600;">Cronograma del Proyecto</div>
+                            <!-- Fase: Fundación -->
+                            <div style="margin-bottom: 0.5rem; font-size: 0.9rem;">
+                                <div style="display: flex; justify-content: space-between;">
+                                    <span>Fundación</span>
+                                    <span>Sem 1-3</span>
+                                </div>
+                                <div class="progress-bar"><div class="progress-fill" style="width: 100%; animation: none; background: #4CAF50;"></div></div>
+                            </div>
+                            <!-- Fase: Estructura -->
+                            <div style="margin-bottom: 0.5rem; font-size: 0.9rem;">
+                                <div style="display: flex; justify-content: space-between;">
+                                    <span>Estructura</span>
+                                    <span>Sem 4-8</span>
+                                </div>
+                                <div class="progress-bar"><div class="progress-fill" style="width: 60%; animation: none;"></div></div>
+                            </div>
+                            <!-- Fase: Acabados -->
+                            <div style="font-size: 0.9rem;">
+                                <div style="display: flex; justify-content: space-between;">
+                                    <span>Acabados</span>
+                                    <span>Sem 9-12</span>
+                                </div>
+                                <div class="progress-bar"><div class="progress-fill" style="width: 20%; animation: none; background: #FFC107;"></div></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ********** FUNCIÓN 4: Control de Costos ********** -->
+            <div class="feature-detail fade-in">
+                <div class="feature-content">
+                    <h2>Control de Costos</h2>
+                    <p>Mantén tu proyecto dentro del presupuesto con herramientas avanzadas...</p>
+                    <ul class="feature-list">
+                        <li>Seguimiento detallado de gastos</li>
+                        <li>Comparación presupuesto vs real</li>
+                        <li>Proyecciones financieras automáticas</li>
+                        <li>Alertas de desviaciones presupuestarias</li>
+                        <li>Reportes financieros detallados</li>
+                    </ul>
+                </div>
+
+                <!-- Mockup financiero -->
+                <div class="feature-visual">
+                    <div class="feature-mockup">
+                        <div class="mockup-header">
+                            <div class="mockup-dot"></div>
+                            <div class="mockup-dot"></div>
+                            <div class="mockup-dot"></div>
+                        </div>
+                        <div class="mockup-content">
+                            <!-- Título -->
+                            <div style="margin-bottom: 1rem; font-weight: 600;">Control Financiero</div>
+
+                            <!-- Comparación entre gastado, presupuesto y restante -->
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
+                                <div style="text-align: center;">
+                                    <div style="font-size: 1.2rem; color: var(--primary-color);">$45,000</div>
+                                    <div style="font-size: 0.8rem;">Gastado</div>
+                                </div>
+                                <div style="text-align: center;">
+                                    <div style="font-size: 1.2rem; color: #4CAF50;">$60,000</div>
+                                    <div style="font-size: 0.8rem;">Presupuesto</div>
+                                </div>
+                                <div style="text-align: center;">
+                                    <div style="font-size: 1.2rem; color: #FFC107;">$15,000</div>
+                                    <div style="font-size: 0.8rem;">Restante</div>
+                                </div>
+                            </div>
+
+                            <!-- Barra de progreso presupuestal -->
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 75%; animation: none; background: linear-gradient(90deg, #4CAF50 0%, #FF9800 75%, #F44336 100%);"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ================= SECCIÓN CTA (Call to Action) ================= -->
+    <section class="cta-section">
+        <div class="cta-content">
+            <h2>¿Listo para optimizar tus proyectos?</h2>
+            <p>Únete a cientos de empresas que ya confían en ProBuild para gestionar sus proyectos de construcción.</p>
+            <!-- Botón que lleva al login/registro -->
+            <a href="probuild-login.html" class="btn-primary">Comenzar Ahora</a>
+        </div>
+    </section>
+
+    <!-- ================= SCRIPT JS DE LA PÁGINA ================= -->
+    <script src="../js/funciones.js" ></script>
+</body>
+</html>

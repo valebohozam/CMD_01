@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ProBuild · Administración de Proyectos (CRUD)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/gestion_proyectos.css">
+</head>
+<body>
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header"><a href="#" class="sidebar-logo">ProBuild</a></div>
+    <ul class="sidebar-nav">
+      <li class="nav-item"><a class="nav-link " href="#"><span class="nav-icon">📊</span> Dashboard</a></li>
+      <li class="nav-item"><a class="nav-link active" href="#"><span class="nav-icon">🏗️</span> Proyectos</a></li>
+      <li class="nav-item"><a class="nav-link" href="#"><span class="nav-icon">👥</span> Usuarios</a></li>
+      <li class="nav-item"><a class="nav-link" href="#"><span class="nav-icon">📅</span> Calendario</a></li>
+      <li class="nav-item"><a class="nav-link" href="#"><span class="nav-icon">💰</span> Finanzas</a></li>
+      <li class="nav-item"><a class="nav-link" href="#"><span class="nav-icon">📋</span> Reportes</a></li>
+      <li class="nav-item"><a class="nav-link" href="#"><span class="nav-icon">⚙️</span> Configuración</a></li>
+      <li class="nav-item"><a class="nav-link" href="#"><span class="nav-icon">🚪</span> Salir</a></li>
+    </ul>
+  </aside>
+
+  <!-- Main -->
+  <main class="main-content">
+    <div class="top-bar">
+      <h1 class="page-title">Administración de Proyectos</h1>
+      <div class="user-info">
+        <div class="user-avatar">BN</div>
+        <div>
+          <div style="font-weight:600">Benjamín Novoa</div>
+          <div style="font-size:.85rem;color:#6c757d">Administrador</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toolbar -->
+    <div class="toolbar">
+      <button class="btn btn-primary" id="btnNuevo">➕ Nuevo Proyecto</button>
+      <input class="input" id="inputSearch" placeholder="Buscar por nombre, código o cliente..." />
+      <select id="filterEstado">
+        <option value="">Todos los estados</option>
+        <option value="EN_PROGRESO">En Progreso</option>
+        <option value="PENDIENTE">Pendiente</option>
+        <option value="COMPLETADO">Completado</option>
+        <option value="CANCELADO">Cancelado</option>
+      </select>
+      <select id="sortBy">
+        <option value="-createdAt">Más reciente</option>
+        <option value="nombre">Nombre (A→Z)</option>
+        <option value="cliente">Cliente (A→Z)</option>
+        <option value="progreso">Progreso</option>
+        <option value="presupuesto">Presupuesto</option>
+        <option value="fechaLimite">Fecha Límite</option>
+      </select>
+      <button class="btn btn-outline" id="btnExport">⬇️ Exportar JSON</button>
+      <button class="btn btn-outline" id="btnImport">⬆️ Importar JSON</button>
+      <input type="file" id="fileImport" accept="application/json" style="display:none" />
+    </div>
+
+    <!-- Table Card -->
+    <section class="card">
+      <div class="card-header">
+        <div class="card-title">Listado de Proyectos</div>
+        <div style="font-size:.9rem;color:#6c757d"><span id="count"></span></div>
+      </div>
+      <div style="overflow-x:auto">
+        <table id="tabla">
+          <thead>
+            <tr>
+              <th>Proyecto</th>
+              <th>Código</th>
+              <th>Cliente</th>
+              <th>Progreso</th>
+              <th>Estado</th>
+              <th>Fecha Límite</th>
+              <th>Presupuesto</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <!-- Modal Crear/Editar -->
+  <div class="modal-backdrop" id="backdrop">
+    <div class="modal" id="modal">
+      <div class="modal-header">
+        <div class="modal-title" id="modalTitle">Nuevo Proyecto</div>
+        <button class="icon-btn" id="btnClose" title="Cerrar" style="background:transparent">✖</button>
+      </div>
+      <form id="formProyecto">
+        <div class="modal-body">
+          <div class="modal-grid">
+            <div class="field">
+              <label class="label">Nombre del Proyecto</label>
+              <input class="input" name="nombre" required placeholder="Ej: Torre Empresarial Norte" />
+            </div>
+            <div class="field">
+              <label class="label">Código</label>
+              <input class="input" name="codigo" required placeholder="Ej: TEN-2024-001" />
+            </div>
+            <div class="field">
+              <label class="label">Cliente</label>
+              <input class="input" name="cliente" required placeholder="Ej: Constructora Moderna S.A." />
+            </div>
+            <div class="field">
+              <label class="label">Estado</label>
+              <select name="estado" required>
+                <option value="EN_PROGRESO">En Progreso</option>
+                <option value="PENDIENTE">Pendiente</option>
+                <option value="COMPLETADO">Completado</option>
+                <option value="CANCELADO">Cancelado</option>
+              </select>
+            </div>
+            <div class="field">
+              <label class="label">Progreso (%)</label>
+              <input class="input" name="progreso" type="number" min="0" max="100" step="1" value="0" />
+            </div>
+            <div class="field">
+              <label class="label">Presupuesto (USD)</label>
+              <input class="input" name="presupuesto" type="number" min="0" step="0.01" value="0" />
+            </div>
+            <div class="field" style="grid-column: 1 / -1;">
+              <label class="label">Fecha Límite</label>
+              <input class="input" name="fechaLimite" type="date" required />
+            </div>
+            <div class="field" style="grid-column: 1 / -1;">
+              <label class="label">Descripción</label>
+              <textarea class="input" name="descripcion" rows="3" placeholder="Resumen del alcance, ubicaciones, hitos, etc."></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-outline" id="btnCancel">Cancelar</button>
+          <button type="submit" class="btn btn-primary" id="btnSubmit">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toasts -->
+  <div class="toast-container" id="toasts"></div>
+
+  <script src="../js/gestion_proyectos.js"></script>
+</body>
+</html>

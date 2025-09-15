@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ProBuild - Contacto</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/contacto.css">
+</head>
+<body>
+    <!-- ================= NAVBAR ================= -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <!-- Logo con enlace al inicio -->
+            <a href="./landing.html" class="logo">ProBuild</a>
+            
+            <!-- Menú de navegación -->
+            <ul class="nav-links">
+                <li><a href="./landing.html">Inicio</a></li>
+                <li><a href="./funciones.html">Funciones</a></li>
+                <li><a href="./proyectos.html">Proyectos</a></li>
+                <!-- Página activa resaltada -->
+                <li><a href="./contacto.html" class="active">Contacto</a></li>
+            </ul>
+
+            <!-- Botón para iniciar sesión -->
+            <a href="probuild-login.html" class="cta-button">Iniciar Sesión</a>
+        </div>
+    </nav>
+
+    <!-- ================= HERO DE LA PÁGINA ================= -->
+    <section class="page-hero">
+        <div class="page-hero-content">
+            <!-- Título principal con parte resaltada -->
+            <h1>Contacta con <span class="highlight">Nosotros</span></h1>
+            <!-- Breve introducción -->
+            <p>¿Tienes preguntas sobre ProBuild? Estamos aquí para ayudarte. Ponte en contacto con nuestro equipo de expertos.</p>
+        </div>
+    </section>
+
+    <!-- ================= SECCIÓN DE CONTACTO ================= -->
+    <section class="contact-section fade-in">
+        <div class="contact-container">
+            
+            <!-- Columna izquierda: Información de contacto -->
+            <div class="contact-info">
+                <h2>Hablemos de tu próximo proyecto</h2>
+                <p>Nuestro equipo de especialistas está listo para ayudarte a transformar la gestión de tus proyectos de construcción.</p>
+                
+                <!-- Dirección -->
+                <div class="contact-item">
+                    <div class="contact-icon">📍</div>
+                    <div class="contact-details">
+                        <h4>Oficina Principal</h4>
+                        <p>Calle 72 #10-25, Piso 8<br>Bogotá, Colombia</p>
+                    </div>
+                </div>
+
+                <!-- Teléfonos -->
+                <div class="contact-item">
+                    <div class="contact-icon">📞</div>
+                    <div class="contact-details">
+                        <h4>Teléfono</h4>
+                        <p>+57 (1) 234-5678<br>+57 300 123 4567</p>
+                    </div>
+                </div>
+
+                <!-- Emails -->
+                <div class="contact-item">
+                    <div class="contact-icon">✉️</div>
+                    <div class="contact-details">
+                        <h4>Email</h4>
+                        <p>info@probuild.com<br>soporte@probuild.com</p>
+                    </div>
+                </div>
+
+                <!-- Horario -->
+                <div class="contact-item">
+                    <div class="contact-icon">⏰</div>
+                    <div class="contact-details">
+                        <h4>Horario de Atención</h4>
+                        <p>Lun - Vie: 8:00 AM - 6:00 PM<br>Sáb: 9:00 AM - 2:00 PM</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Columna derecha: Formulario -->
+            <div class="contact-form">
+                <!-- Mensaje de éxito oculto (se muestra al enviar) -->
+                <div class="success-message" id="successMessage">
+                    ¡Mensaje enviado con éxito! Te contactaremos pronto.
+                </div>
+                
+                <!-- Formulario de contacto -->
+                <form id="contactForm">
+                    <!-- Fila: nombre y apellido -->
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="firstName">Nombre</label>
+                            <input type="text" id="firstName" class="form-input" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="lastName">Apellido</label>
+                            <input type="text" id="lastName" class="form-input" required>
+                        </div>
+                    </div>
+
+                    <!-- Fila: email y teléfono -->
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" class="form-input" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Teléfono</label>
+                            <input type="tel" id="phone" class="form-input" required>
+                        </div>
+                    </div>
+
+                    <!-- Campo: empresa -->
+                    <div class="form-group">
+                        <label for="company">Empresa</label>
+                        <input type="text" id="company" class="form-input">
+                    </div>
+
+                    <!-- Campo: asunto con select -->
+                    <div class="form-group">
+                        <label for="subject">Asunto</label>
+                        <select id="subject" class="form-select" required>
+                            <option value="">Selecciona un asunto</option>
+                            <option value="demo">Solicitar Demo</option>
+                            <option value="pricing">Información de Precios</option>
+                            <option value="support">Soporte Técnico</option>
+                            <option value="partnership">Alianzas Comerciales</option>
+                            <option value="other">Otro</option>
+                        </select>
+                    </div>
+
+                    <!-- Campo: mensaje -->
+                    <div class="form-group">
+                        <label for="message">Mensaje</label>
+                        <textarea id="message" class="form-textarea" placeholder="Cuéntanos sobre tu proyecto o pregunta..." required></textarea>
+                    </div>
+
+                    <!-- Botón de envío -->
+                    <button type="submit" class="btn-submit">Enviar Mensaje</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= MAPA ================= -->
+    <section class="map-section">
+        <div class="map-container">
+            <!-- Aquí puedes integrar Google Maps real -->
+            <div class="map-placeholder">
+                <div class="map-overlay">
+                    <h3>📍 Encuéntranos en Bogotá</h3>
+                    <p>Calle 72 #10-25, Piso 8, Chapinero</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= FAQ ================= -->
+    <section class="faq-section fade-in">
+        <div class="faq-container">
+            <!-- Título de la sección -->
+            <div class="section-title">
+                <h2>Preguntas Frecuentes</h2>
+                <p>Encuentra respuestas a las preguntas más comunes sobre ProBuild</p>
+            </div>
+
+            <!-- Lista de FAQs -->
+            <div class="faq-list">
+                <!-- Item FAQ -->
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <h4>¿Qué es ProBuild y cómo puede ayudar a mi empresa?</h4>
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            ProBuild es una plataforma integral de gestión de proyectos de construcción que te permite planificar, ejecutar y controlar todos los aspectos de tus proyectos desde un solo lugar.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Repite estructura para cada pregunta -->
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <h4>¿Cuánto tiempo toma implementar ProBuild?</h4>
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            La implementación típica de ProBuild toma entre 2-4 semanas...
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <h4>¿ProBuild funciona en dispositivos móviles?</h4>
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Sí, ProBuild cuenta con aplicaciones móviles nativas para iOS y Android.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <h4>¿Qué tipo de soporte técnico ofrecen?</h4>
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Ofrecemos soporte técnico 24/7 a través de chat en vivo, email y teléfono.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <h4>¿Pueden personalizar ProBuild para nuestras necesidades específicas?</h4>
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Absolutamente. ProBuild es altamente personalizable según tus flujos de trabajo.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= JAVASCRIPT ================= -->
+    <!-- Archivo JS con la lógica para formulario y FAQs -->
+    <script src="../js/contacto.js"></script>
+</body>
+</html>
